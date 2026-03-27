@@ -3,131 +3,111 @@ import {
   Box,
   BoxProps,
   createVarsResolver,
-  getFontSize,
-  getRadius,
-  getSize,
-  getThemeColor,
-  PolymorphicFactory,
-  polymorphicFactory,
+  Factory,
+  factory,
   StylesApiProps,
   useProps,
   useStyles,
-  type MantineColor,
-  type MantineRadius,
-  type MantineSize,
-  type StyleProp,
 } from '@mantine/core';
 import classes from './DepthSelect.module.css';
 
-export type DepthSelectVariant = 'flat' | '3d';
+export interface DepthSelectItem {
+  /** Unique value identifying this item */
+  value: string | number;
 
-export type DepthSelectAnimationType = 'pulse' | 'flash' | 'breathe' | 'blink' | 'glow' | 'none';
+  /** Content rendered inside the card */
+  view: React.ReactNode;
+}
 
-export type DepthSelectStylesNames = 'root' | 'depthSelect' | 'label' | 'light' | 'glow';
+export type DepthSelectStylesNames = 'root' | 'stack' | 'card';
 
 export type DepthSelectCssVariables = {
   root:
-    | '--depth-select-size'
-    | '--depth-select-radius'
-    | '--depth-select-color'
-    | '--depth-select-intensity'
-    | '--depth-select-animation-duration'
-    | '--depth-select-glow-size'
-    | '--depth-select-justify-content';
+    | '--ds-transition-duration'
+    | '--ds-scale-step'
+    | '--ds-translate-y-step'
+    | '--ds-opacity-step'
+    | '--ds-blur-step'
+    | '--ds-visible-cards';
 };
 
 export interface DepthSelectBaseProps {
-  /** DepthSelect color from theme */
-  color?: MantineColor;
+  /** Array of items to display in the stack */
+  data?: DepthSelectItem[];
 
-  /** DepthSelect size */
-  size?: MantineSize | (string & {}) | number;
+  /** Controlled: currently selected value */
+  value?: string | number;
 
-  /** Border radius */
-  radius?: MantineRadius | (string & {}) | number;
+  /** Uncontrolled: initial selected value (defaults to first item) */
+  defaultValue?: string | number;
 
-  /** Controls DepthSelect on/off state */
-  value?: boolean;
+  /** Number of cards visible in the stack, @default 4 */
+  visibleCards?: number;
 
-  /** Light intensity (0-100) */
-  intensity?: number;
+  /** Transition duration in ms, @default 400 */
+  transitionDuration?: number;
 
-  /** Enable animation */
-  animate?: boolean;
+  /** Scale reduction per depth level, @default 0.06 */
+  scaleStep?: number;
 
-  /** Animation type; one of 'pulse', 'flash', 'breathe', 'blink', 'glow', or 'none' */
-  animationType?: DepthSelectAnimationType;
+  /** Vertical offset per depth level in px, @default 30 */
+  translateYStep?: number;
 
-  /** Animation duration in seconds */
-  animationDuration?: number;
+  /** Opacity reduction per depth level, @default 0.15 */
+  opacityStep?: number;
 
-  /** Label content */
-  label?: React.ReactNode;
-
-  /** Label position */
-  labelPosition?: 'left' | 'right';
-
-  /** `justify-content` CSS property */
-  justify?: StyleProp<React.CSSProperties['justifyContent']>;
+  /** Blur increment per depth level in px, @default 1 */
+  blurStep?: number;
 }
 
 export interface DepthSelectProps
   extends BoxProps, DepthSelectBaseProps, StylesApiProps<DepthSelectFactory> {}
 
-export type DepthSelectFactory = PolymorphicFactory<{
+export type DepthSelectFactory = Factory<{
   props: DepthSelectProps;
-  defaultComponent: 'div';
-  defaultRef: HTMLDivElement;
+  ref: HTMLDivElement;
   stylesNames: DepthSelectStylesNames;
-  variant: DepthSelectVariant;
   vars: DepthSelectCssVariables;
 }>;
 
 const defaultProps: Partial<DepthSelectProps> = {
-  color: 'green',
-  size: 'sm',
-  radius: 'xl',
-  value: true,
-  variant: 'flat',
-  intensity: 80,
-  animate: false,
-  animationType: 'none',
-  animationDuration: 1.5,
-  labelPosition: 'right',
+  data: [],
+  visibleCards: 4,
+  transitionDuration: 400,
+  scaleStep: 0.06,
+  translateYStep: 30,
+  opacityStep: 0.15,
+  blurStep: 1,
 };
 
 const varsResolver = createVarsResolver<DepthSelectFactory>(
-  (theme, { size, radius, color, intensity, animationDuration, justify }) => {
-    return {
-      root: {
-        '--depth-select-size': getSize(size, 'depth-select-size'),
-        '--depth-select-radius': radius === undefined ? undefined : getRadius(radius),
-        '--depth-select-color': getThemeColor(color, theme),
-        '--depth-select-intensity': intensity !== undefined ? `${intensity / 100}` : '0.8',
-        '--depth-select-animation-duration':
-          animationDuration !== undefined ? `${animationDuration}s` : '1.5s',
-        '--depth-select-glow-size': `calc(var(--depth-select-size) * 0.6)`,
-        '--depth-select-justify-content': String(justify) || 'center',
-      },
-    };
-  }
+  (
+    _theme,
+    { transitionDuration, scaleStep, translateYStep, opacityStep, blurStep, visibleCards }
+  ) => ({
+    root: {
+      '--ds-transition-duration': `${transitionDuration}ms`,
+      '--ds-scale-step': String(scaleStep),
+      '--ds-translate-y-step': `${translateYStep}px`,
+      '--ds-opacity-step': String(opacityStep),
+      '--ds-blur-step': `${blurStep}px`,
+      '--ds-visible-cards': String(visibleCards),
+    },
+  })
 );
 
-export const DepthSelect = polymorphicFactory<DepthSelectFactory>((_props, ref) => {
+export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
   const props = useProps('DepthSelect', defaultProps, _props);
   const {
-    size,
-    radius,
-    color,
-    intensity,
-    animationDuration,
+    data,
     value,
-    animate,
-    animationType,
-    variant,
-    label,
-    labelPosition,
-    justify,
+    defaultValue,
+    visibleCards,
+    transitionDuration,
+    scaleStep,
+    translateYStep,
+    opacityStep,
+    blurStep,
 
     classNames,
     style,
@@ -152,27 +132,39 @@ export const DepthSelect = polymorphicFactory<DepthSelectFactory>((_props, ref) 
     varsResolver,
   });
 
+  // Determine current index — for Phase 2, use controlled value or defaultValue or 0
+  const items = data || [];
+  const currentValue = value ?? defaultValue ?? items[0]?.value;
+  const currentIndex = items.findIndex((item) => item.value === currentValue);
+  const activeIndex = currentIndex >= 0 ? currentIndex : 0;
+
+  // Build the visible slice of cards starting from activeIndex
+  const visibleItems = items.slice(activeIndex, activeIndex + (visibleCards || 4));
+
   return (
-    <Box
-      ref={ref}
-      {...getStyles('root')}
-      {...others}
-      mod={[{ 'label-position': labelPosition }, mod]}
-      __vars={{
-        '--label-fz': getFontSize(size),
-        '--label-lh': getSize(size, 'label-lh'),
-      }}
-    >
-      <Box
-        {...getStyles('depthSelect')}
-        variant={variant}
-        data-value={value || undefined}
-        data-animate={animate && value ? animationType : undefined}
-      >
-        <Box {...getStyles('glow')} />
-        <Box {...getStyles('light')} />
+    <Box ref={ref} {...getStyles('root')} {...others} mod={mod}>
+      <Box {...getStyles('stack')}>
+        {visibleItems.map((item, depth) => {
+          const cardStyle: React.CSSProperties = {
+            transform: `scale(${1 - (scaleStep || 0.06) * depth}) translateY(${-(translateYStep || 30) * depth}px)`,
+            opacity: 1 - (opacityStep || 0.15) * depth,
+            filter: depth > 0 ? `blur(${(blurStep || 1) * depth}px)` : undefined,
+            zIndex: (visibleCards || 4) - depth,
+          };
+
+          return (
+            <Box
+              key={item.value}
+              {...getStyles('card')}
+              style={cardStyle}
+              data-active={depth === 0 || undefined}
+              data-depth={depth}
+            >
+              {item.view}
+            </Box>
+          );
+        })}
       </Box>
-      {label && <Box {...getStyles('label')}>{label}</Box>}
     </Box>
   );
 });

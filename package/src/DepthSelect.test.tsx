@@ -1,6 +1,14 @@
 import React from 'react';
 import { render } from '@mantine-tests/core';
-import { DepthSelect } from './DepthSelect';
+import { DepthSelect, DepthSelectItem } from './DepthSelect';
+
+const TEST_DATA: DepthSelectItem[] = [
+  { value: 'item-1', view: <div>Item 1</div> },
+  { value: 'item-2', view: <div>Item 2</div> },
+  { value: 'item-3', view: <div>Item 3</div> },
+  { value: 'item-4', view: <div>Item 4</div> },
+  { value: 'item-5', view: <div>Item 5</div> },
+];
 
 describe('DepthSelect', () => {
   it('renders without crashing', () => {
@@ -8,51 +16,49 @@ describe('DepthSelect', () => {
     expect(container).toBeTruthy();
   });
 
+  it('renders without crashing with data', () => {
+    const { container } = render(<DepthSelect data={TEST_DATA} />);
+    expect(container).toBeTruthy();
+  });
+
   it('forwards ref', () => {
     const ref = React.createRef<HTMLDivElement>();
-    render(<DepthSelect ref={ref} />);
+    render(<DepthSelect ref={ref} data={TEST_DATA} />);
     expect(ref.current).toBeTruthy();
   });
 
-  it('applies value prop as data attribute when true', () => {
-    const { container } = render(<DepthSelect />);
-    const root = container.querySelector('[data-value]');
-    expect(root).toBeTruthy();
+  it('renders visible cards based on visibleCards prop', () => {
+    const { container } = render(<DepthSelect data={TEST_DATA} visibleCards={3} />);
+    const cards = container.querySelectorAll('[data-depth]');
+    expect(cards.length).toBe(3);
   });
 
-  it('does not apply value data attribute when false', () => {
-    const { container } = render(<DepthSelect value={false} />);
-    const root = container.querySelector('[data-value]');
-    expect(root).toBeFalsy();
+  it('marks first card as active', () => {
+    const { container } = render(<DepthSelect data={TEST_DATA} />);
+    const activeCard = container.querySelector('[data-active]');
+    expect(activeCard).toBeTruthy();
+    expect(activeCard?.getAttribute('data-depth')).toBe('0');
   });
 
-  it('applies animation type as data attribute when animate is true and value is true', () => {
-    const { container } = render(<DepthSelect animate animationType="pulse" />);
-    const root = container.querySelector('[data-animate="pulse"]');
-    expect(root).toBeTruthy();
+  it('assigns correct depth data attributes', () => {
+    const { container } = render(<DepthSelect data={TEST_DATA} visibleCards={4} />);
+    const cards = container.querySelectorAll('[data-depth]');
+    expect(cards.length).toBe(4);
+    cards.forEach((card, index) => {
+      expect(card.getAttribute('data-depth')).toBe(String(index));
+    });
   });
 
-  it('does not apply animation when animate is false', () => {
-    const { container } = render(<DepthSelect animate={false} animationType="pulse" />);
-    const root = container.querySelector('[data-animate]');
-    expect(root).toBeFalsy();
+  it('renders correct card when value is controlled', () => {
+    const { container } = render(<DepthSelect data={TEST_DATA} value="item-3" />);
+    const activeCard = container.querySelector('[data-active]');
+    expect(activeCard).toBeTruthy();
+    expect(activeCard?.textContent).toBe('Item 3');
   });
 
-  it('does not apply animation when value is false', () => {
-    const { container } = render(<DepthSelect animate animationType="pulse" value={false} />);
-    const root = container.querySelector('[data-animate]');
-    expect(root).toBeFalsy();
-  });
-
-  it('supports flat variant', () => {
-    const { container } = render(<DepthSelect variant="flat" />);
-    const root = container.querySelector('[data-variant="flat"]');
-    expect(root).toBeTruthy();
-  });
-
-  it('supports 3d variant', () => {
-    const { container } = render(<DepthSelect variant="3d" />);
-    const root = container.querySelector('[data-variant="3d"]');
-    expect(root).toBeTruthy();
+  it('renders empty when data is empty', () => {
+    const { container } = render(<DepthSelect data={[]} />);
+    const cards = container.querySelectorAll('[data-depth]');
+    expect(cards.length).toBe(0);
   });
 });

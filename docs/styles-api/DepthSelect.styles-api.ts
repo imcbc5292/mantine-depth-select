@@ -4,41 +4,32 @@ import type { StylesApiData } from '../components/styles-api.types';
 export const DepthSelectStylesApi: StylesApiData<DepthSelectFactory> = {
   selectors: {
     root: 'Root element',
-    depthSelect: 'DepthSelect element',
-    label: 'Label element',
-    glow: 'Outer glow effect element',
-    light: 'Inner light reflection element',
+    stack: 'Stack wrapper containing all cards',
+    card: 'Individual card in the stack',
   },
 
   vars: {
     root: {
-      '--depth-select-size': 'Controls DepthSelect width and height',
-      '--depth-select-radius': 'Controls border radius',
-      '--depth-select-color': 'Controls DepthSelect base color',
-      '--depth-select-intensity': 'Controls brightness intensity (0-1)',
-      '--depth-select-animation-duration': 'Controls animation duration',
-      '--depth-select-glow-size': 'Controls outer glow size',
-      '--depth-select-justify-content': 'Controls label and DepthSelect alignment',
+      '--ds-transition-duration': 'Controls animation transition duration',
+      '--ds-scale-step': 'Controls scale reduction per depth level',
+      '--ds-translate-y-step': 'Controls vertical offset per depth level',
+      '--ds-opacity-step': 'Controls opacity reduction per depth level',
+      '--ds-blur-step': 'Controls blur increment per depth level',
+      '--ds-visible-cards': 'Controls number of visible cards in the stack',
     },
   },
 
   modifiers: [
     {
-      modifier: 'data-value',
-      selector: 'root',
-      condition: '`value` prop is true',
+      modifier: 'data-active',
+      selector: 'card',
+      condition: 'Card is the frontmost (active) card',
     },
     {
-      modifier: 'data-animate',
-      selector: 'root',
-      value: 'pulse | flash | breathe | blink | glow',
-      condition: '`animate` prop is true and `value` is true',
-    },
-    {
-      modifier: 'data-variant',
-      selector: 'root',
-      value: 'flat | 3d',
-      condition: 'Based on `variant` prop',
+      modifier: 'data-depth',
+      selector: 'card',
+      value: '0 | 1 | 2 | ...',
+      condition: 'Depth level of the card in the stack (0 = front)',
     },
   ],
 };

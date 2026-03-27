@@ -5,13 +5,16 @@ import * as demos from './demos';
 
 <InstallScript packages="@gfazioli/mantine-depth-select" />
 
-After installation import package styles at the root of your application:
+After installation import package styles at the root of your
+application:
 
 ```tsx
 import '@gfazioli/mantine-depth-select/styles.css';
 ```
 
-You can import styles within a layer `@layer mantine-depth-select` by importing `@gfazioli/mantine-depth-select/styles.layer.css` file.
+You can import styles within a layer
+`@layer mantine-depth-select` by importing
+`@gfazioli/mantine-depth-select/styles.layer.css` file.
 
 ```tsx
 import '@gfazioli/mantine-depth-select/styles.layer.css';
@@ -19,60 +22,25 @@ import '@gfazioli/mantine-depth-select/styles.layer.css';
 
 ## Usage
 
-Explore all available props and see the component in action:
+A 3D stack select component inspired by macOS Time Machine.
+Navigate through stacked cards with perspective transforms
+and smooth transitions.
 
 <Demo data={demos.configurator} />
 
 ## Controlled
 
-The DepthSelect component is fully controlled through the `value` prop. Here's an example of controlling the DepthSelect state:
+The DepthSelect component supports both controlled and
+uncontrolled modes. Use the `value` prop for controlled
+mode:
 
 <Demo data={demos.controlled} />
 
-## Colors
-
-The DepthSelect component supports all Mantine theme colors. Use the `color` prop to set the DepthSelect color:
-
-<Demo data={demos.colors} />
-
-## Animations
-
-Add visual feedback with built-in animations. The component supports multiple animation types:
-
-- **pulse**: Smooth pulsing effect (default)
-- **flash**: Quick flashing
-- **breathe**: Slow breathing effect
-- **blink**: Regular blinking
-- **glow**: Glowing effect with increased intensity
-
-<Demo data={demos.animations} />
-
-## Labels
-
-Add descriptive labels to your DepthSelect indicators with full customization support:
-
-<Demo data={demos.labels} />
-
-The `label` prop accepts any React node, allowing you to use custom components like badges, icons, or formatted text. Use `labelPosition` to control whether the label appears on the left or right side of the DepthSelect.
-
 ## Styles API
 
-`DepthSelect` supports [Styles API](https://mantine.dev/styles/styles-api/), you can add styles to any inner element of the component with `classNames` prop. Follow [Styles API](https://mantine.dev/styles/styles-api/) documentation to learn more.
-
-You can customize the appearance of the `DepthSelect` component using the Styles API. This allows you to modify styles for various parts of the component, such as the root, depthSelect, and label.
+`DepthSelect` supports
+[Styles API](https://mantine.dev/styles/styles-api/),
+you can add styles to any inner element of the component
+with `classNames` prop.
 
 <Demo data={demos.stylesApi} />
-
-## Use Cases
-
-### System Status Panel
-
-Monitor multiple system components with organized DepthSelect indicators:
-
-<Demo data={demos.statusPanel} />
-
-### DEFCON Alert System
-
-A fun example showing how to build a DEFCON (Defense Readiness Condition) alert system with animated DepthSelects:
-
-<Demo data={demos.defcon} />

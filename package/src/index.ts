@@ -3,4 +3,7 @@ export type {
   DepthSelectBaseProps,
   DepthSelectCssVariables,
   DepthSelectFactory,
+  DepthSelectItem,
+  DepthSelectProps,
+  DepthSelectStylesNames,
 } from './DepthSelect';

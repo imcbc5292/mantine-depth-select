@@ -1,269 +1,150 @@
 import React from 'react';
-import { Divider, Group, Paper, Stack, Text } from '@mantine/core';
-import { DepthSelect, type DepthSelectProps } from './DepthSelect';
+import { Card, Paper, Stack, Text, Title } from '@mantine/core';
+import { DepthSelect, type DepthSelectItem } from './DepthSelect';
 
 export default {
   title: 'Components/DepthSelect',
-  args: {
-    size: 'md',
-    radius: 'xl',
-    value: true,
-    variant: 'flat',
-    intensity: 80,
-    animate: false,
-    animationType: 'none',
-    animationDuration: 1.5,
-  },
-  argTypes: {
-    label: {
-      control: 'text',
-    },
-    justify: {
-      control: 'select',
-      options: [
-        'flex-start',
-        'center',
-        'flex-end',
-        'space-between',
-        'space-around',
-        'space-evenly',
-      ],
-    },
-    labelPosition: {
-      control: 'select',
-      options: ['left', 'right'],
-    },
-    size: {
-      control: 'select',
-      options: ['xs', 'sm', 'md', 'lg', 'xl'],
-    },
-    radius: {
-      control: 'select',
-      options: ['xs', 'sm', 'md', 'lg', 'xl'],
-    },
-    color: {
-      control: 'color',
-    },
-    variant: {
-      control: 'select',
-      options: ['flat', '3d'],
-    },
-    intensity: {
-      control: { type: 'range', min: 0, max: 100, step: 10 },
-    },
-    animationType: {
-      control: 'select',
-      options: ['none', 'pulse', 'flash', 'breathe', 'blink', 'glow'],
-    },
-    animationDuration: {
-      control: { type: 'range', min: 0.5, max: 10, step: 0.5 },
-    },
-  },
 };
+
+const SAMPLE_DATA: DepthSelectItem[] = [
+  {
+    value: 'snapshot-1',
+    view: (
+      <Card shadow="sm" padding="lg" withBorder>
+        <Title order={4}>Snapshot 1 — Today</Title>
+        <Text size="sm" c="dimmed">
+          Most recent backup
+        </Text>
+        <Text mt="sm">This is the frontmost card in the stack.</Text>
+      </Card>
+    ),
+  },
+  {
+    value: 'snapshot-2',
+    view: (
+      <Card shadow="sm" padding="lg" withBorder>
+        <Title order={4}>Snapshot 2 — Yesterday</Title>
+        <Text size="sm" c="dimmed">
+          Previous backup
+        </Text>
+        <Text mt="sm">Second card in the stack.</Text>
+      </Card>
+    ),
+  },
+  {
+    value: 'snapshot-3',
+    view: (
+      <Card shadow="sm" padding="lg" withBorder>
+        <Title order={4}>Snapshot 3 — 2 days ago</Title>
+        <Text size="sm" c="dimmed">
+          Older backup
+        </Text>
+        <Text mt="sm">Third card in the stack.</Text>
+      </Card>
+    ),
+  },
+  {
+    value: 'snapshot-4',
+    view: (
+      <Card shadow="sm" padding="lg" withBorder>
+        <Title order={4}>Snapshot 4 — 3 days ago</Title>
+        <Text size="sm" c="dimmed">
+          Even older backup
+        </Text>
+        <Text mt="sm">Fourth card in the stack.</Text>
+      </Card>
+    ),
+  },
+  {
+    value: 'snapshot-5',
+    view: (
+      <Card shadow="sm" padding="lg" withBorder>
+        <Title order={4}>Snapshot 5 — Last week</Title>
+        <Text size="sm" c="dimmed">
+          Weekly backup
+        </Text>
+        <Text mt="sm">Fifth card in the stack.</Text>
+      </Card>
+    ),
+  },
+];
 
 export function Usage() {
   return (
-    <Stack gap="xl" p="md">
-      <Paper p="md" withBorder>
-        <Text fw={500} mb="md">
-          Basic DepthSelect States
-        </Text>
-        <Group>
-          <Stack align="center">
-            <DepthSelect />
-            <Text size="xs">On</Text>
-          </Stack>
-          <Stack align="center">
-            <DepthSelect value={false} />
-            <Text size="xs">Off</Text>
-          </Stack>
-        </Group>
-      </Paper>
+    <Stack gap="xl" p="md" maw={500} mx="auto">
+      <Title order={2}>DepthSelect — Static 3D Stack</Title>
 
-      <Paper p="md" withBorder>
-        <Text fw={500} mb="md">
-          Variants
+      <Paper p="xl" withBorder>
+        <Text fw={500} mb="lg">
+          Default (4 visible cards)
         </Text>
-        <Group>
-          <Stack align="center">
-            <DepthSelect variant="flat" />
-            <Text size="xs">Flat</Text>
-          </Stack>
-          <Stack align="center">
-            <DepthSelect variant="3d" />
-            <Text size="xs">3D</Text>
-          </Stack>
-        </Group>
-      </Paper>
-
-      <Paper p="md" withBorder>
-        <Text fw={500} mb="md">
-          Sizes
-        </Text>
-        <Group align="flex-end">
-          <Stack align="center">
-            <DepthSelect size="xs" />
-            <Text size="xs">XS</Text>
-          </Stack>
-          <Stack align="center">
-            <DepthSelect size="sm" />
-            <Text size="xs">SM</Text>
-          </Stack>
-          <Stack align="center">
-            <DepthSelect size="md" />
-            <Text size="xs">MD</Text>
-          </Stack>
-          <Stack align="center">
-            <DepthSelect size="lg" />
-            <Text size="xs">LG</Text>
-          </Stack>
-          <Stack align="center">
-            <DepthSelect size="xl" />
-            <Text size="xs">XL</Text>
-          </Stack>
-        </Group>
-      </Paper>
-
-      <Paper p="md" withBorder>
-        <Text fw={500} mb="md">
-          Colors
-        </Text>
-        <Group>
-          {['red', 'green', 'blue', 'yellow', 'orange', 'cyan', 'pink', 'violet'].map((color) => (
-            <Stack key={color} align="center">
-              <DepthSelect color={color} variant="3d" size="lg" />
-              <Text size="xs" tt="capitalize">
-                {color}
-              </Text>
-            </Stack>
-          ))}
-        </Group>
-      </Paper>
-
-      <Paper p="md" withBorder>
-        <Text fw={500} mb="md">
-          Intensity Levels (3D variant)
-        </Text>
-        <Group>
-          {[20, 40, 60, 80, 100].map((intensity) => (
-            <Stack key={intensity} align="center">
-              <DepthSelect intensity={intensity} variant="3d" size="lg" />
-              <Text size="xs">{intensity}%</Text>
-            </Stack>
-          ))}
-        </Group>
-      </Paper>
-
-      <Paper p="md" withBorder>
-        <Text fw={500} mb="md">
-          Animations
-        </Text>
-        <Group>
-          <Stack align="center">
-            <DepthSelect animate animationType="pulse" size="lg" />
-            <Text size="xs">Pulse</Text>
-          </Stack>
-          <Stack align="center">
-            <DepthSelect animate animationType="flash" size="lg" color="red" />
-            <Text size="xs">Flash</Text>
-          </Stack>
-          <Stack align="center">
-            <DepthSelect animate animationType="breathe" size="lg" color="blue" />
-            <Text size="xs">Breathe</Text>
-          </Stack>
-          <Stack align="center">
-            <DepthSelect animate animationType="blink" size="lg" color="yellow" />
-            <Text size="xs">Blink</Text>
-          </Stack>
-          <Stack align="center">
-            <DepthSelect animate animationType="glow" size="lg" color="cyan" />
-            <Text size="xs">Glow</Text>
-          </Stack>
-        </Group>
-      </Paper>
-
-      <Paper p="md" withBorder>
-        <Text fw={500} mb="md">
-          Animation Speed
-        </Text>
-        <Group>
-          <Stack align="center">
-            <DepthSelect animate animationType="pulse" animationDuration={0.5} size="lg" />
-            <Text size="xs">Fast (0.5s)</Text>
-          </Stack>
-          <Stack align="center">
-            <DepthSelect animate animationType="pulse" animationDuration={1.5} size="lg" />
-            <Text size="xs">Normal (1.5s)</Text>
-          </Stack>
-          <Stack align="center">
-            <DepthSelect animate animationType="pulse" animationDuration={3} size="lg" />
-            <Text size="xs">Slow (3s)</Text>
-          </Stack>
-        </Group>
-      </Paper>
-
-      <Paper p="md" withBorder>
-        <Text fw={500} mb="md">
-          Combined Effects (3D + Animation + High Intensity)
-        </Text>
-        <Group>
-          <DepthSelect
-            variant="3d"
-            animate
-            animationType="glow"
-            intensity={100}
-            size="xl"
-            color="green"
-          />
-          <DepthSelect
-            variant="3d"
-            animate
-            animationType="pulse"
-            intensity={90}
-            size="xl"
-            color="red"
-          />
-          <DepthSelect
-            variant="3d"
-            animate
-            animationType="breathe"
-            intensity={95}
-            size="xl"
-            color="blue"
-          />
-        </Group>
+        <DepthSelect data={SAMPLE_DATA} />
       </Paper>
     </Stack>
   );
 }
 
-export function WithProps(props: DepthSelectProps) {
-  return <DepthSelect {...props} />;
+export function CustomSteps() {
+  return (
+    <Stack gap="xl" p="md" maw={500} mx="auto">
+      <Paper p="xl" withBorder>
+        <Text fw={500} mb="lg">
+          More dramatic depth effect
+        </Text>
+        <DepthSelect
+          data={SAMPLE_DATA}
+          scaleStep={0.1}
+          translateYStep={40}
+          opacityStep={0.2}
+          blurStep={2}
+        />
+      </Paper>
+    </Stack>
+  );
 }
 
-export function WithLabel() {
+export function SubtleEffect() {
   return (
-    <>
-      <Group>
-        <DepthSelect label="Server Online" color="green" />
-        <DepthSelect label="Server Offline" color="red" value={false} />
-        <DepthSelect label={<Text c="blue">Custom Label</Text>} color="blue" />
-      </Group>
-      <Divider />
-      <div>
-        <DepthSelect label="Left Label" labelPosition="left" color="orange" />
-      </div>
+    <Stack gap="xl" p="md" maw={500} mx="auto">
+      <Paper p="xl" withBorder>
+        <Text fw={500} mb="lg">
+          Subtle depth effect
+        </Text>
+        <DepthSelect
+          data={SAMPLE_DATA}
+          scaleStep={0.03}
+          translateYStep={20}
+          opacityStep={0.1}
+          blurStep={0.5}
+          visibleCards={5}
+        />
+      </Paper>
+    </Stack>
+  );
+}
 
-      <div>
-        <DepthSelect label="Right Label" labelPosition="right" color="pink" />
-      </div>
+export function ControlledValue() {
+  return (
+    <Stack gap="xl" p="md" maw={500} mx="auto">
+      <Paper p="xl" withBorder>
+        <Text fw={500} mb="lg">
+          Starting from Snapshot 3
+        </Text>
+        <DepthSelect data={SAMPLE_DATA} value="snapshot-3" />
+      </Paper>
+    </Stack>
+  );
+}
 
-      <Divider />
-      <Stack>
-        <DepthSelect label="Left Label" labelPosition="left" color="orange" />
-
-        <DepthSelect label="Right Label" labelPosition="right" color="pink" />
-      </Stack>
-    </>
+export function TwoCards() {
+  return (
+    <Stack gap="xl" p="md" maw={500} mx="auto">
+      <Paper p="xl" withBorder>
+        <Text fw={500} mb="lg">
+          Only 2 visible cards
+        </Text>
+        <DepthSelect data={SAMPLE_DATA} visibleCards={2} />
+      </Paper>
+    </Stack>
   );
 }
