@@ -119,6 +119,7 @@ const defaultProps: Partial<DepthSelectProps> = {
   translateYStep: 30,
   opacityStep: 0.15,
   blurStep: 1,
+  ariaLabel: 'Depth select',
 };
 
 const varsResolver = createVarsResolver<DepthSelectFactory>(
@@ -224,8 +225,8 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
     varsResolver,
   });
 
-  const items = data!;
-  const maxVisible = visibleCards!;
+  const items = data ?? [];
+  const maxVisible = visibleCards ?? 4;
 
   const [_value, handleChange] = useUncontrolled({
     value,
@@ -373,10 +374,10 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
         getCardStyle(
           i - activeIndex,
           maxVisible,
-          scaleStep!,
-          translateYStep!,
-          opacityStep!,
-          blurStep!
+          scaleStep ?? 0.1,
+          translateYStep ?? 30,
+          opacityStep ?? 0.15,
+          blurStep ?? 1
         )
       );
     }
@@ -408,7 +409,7 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
         mod={[{ 'controls-position': controlsPosition }, mod]}
         tabIndex={0}
         role="listbox"
-        aria-label={ariaLabel || 'Depth select'}
+        aria-label={ariaLabel}
         aria-activedescendant={activeItem ? `ds-item-${activeItem.value}` : undefined}
         onKeyDown={handleKeyDown}
         onTouchStart={handleTouchStart}

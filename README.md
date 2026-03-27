@@ -59,12 +59,13 @@ import '@gfazioli/mantine-depth-select/styles.css';
 ## Usage
 
 ```tsx
+import { Card, Text } from '@mantine/core';
 import { DepthSelect, DepthSelectItem } from '@gfazioli/mantine-depth-select';
 
 const data: DepthSelectItem[] = [
-  { value: 'item-1', view: <Card>Item 1</Card> },
-  { value: 'item-2', view: <Card>Item 2</Card> },
-  { value: 'item-3', view: <Card>Item 3</Card> },
+  { value: 'item-1', view: <Card p="lg" withBorder h="100%"><Text>Item 1</Text></Card> },
+  { value: 'item-2', view: <Card p="lg" withBorder h="100%"><Text>Item 2</Text></Card> },
+  { value: 'item-3', view: <Card p="lg" withBorder h="100%"><Text>Item 3</Text></Card> },
 ];
 
 function Demo() {

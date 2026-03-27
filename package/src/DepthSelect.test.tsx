@@ -282,4 +282,45 @@ describe('DepthSelect', () => {
     const disabledButton = container.querySelector('[data-disabled]');
     expect(disabledButton).toBeFalsy();
   });
+
+  // controlsProps
+
+  it('passes controlsProps to built-in controls', () => {
+    const { container } = render(
+      <DepthSelect
+        data={TEST_DATA}
+        defaultValue="item-2"
+        controlsProps={{ labelFormatter: (item) => `Label: ${item.value}` }}
+        w={300}
+        h={200}
+      />
+    );
+    expect(container.textContent).toContain('Label: item-2');
+  });
+
+  // Numeric values
+
+  it('works with numeric values', () => {
+    const numericData = [
+      { value: 1, view: <div>One</div> },
+      { value: 2, view: <div>Two</div> },
+      { value: 3, view: <div>Three</div> },
+    ];
+    const onChange = jest.fn();
+    const { container } = render(
+      <DepthSelect data={numericData} defaultValue={1} onChange={onChange} w={300} h={200} />
+    );
+    const root = container.querySelector('[tabindex="0"]')!;
+    fireEvent.keyDown(root, { key: 'ArrowUp' });
+    expect(onChange).toHaveBeenCalledWith(2);
+  });
+
+  // withScrollNavigation
+
+  it('renders without scroll navigation when disabled', () => {
+    const { container } = render(
+      <DepthSelect data={TEST_DATA} withScrollNavigation={false} w={300} h={200} />
+    );
+    expect(container).toBeTruthy();
+  });
 });
