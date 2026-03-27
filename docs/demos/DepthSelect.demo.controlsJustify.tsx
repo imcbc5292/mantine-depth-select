@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { DepthSelect, DepthSelectItem } from '@gfazioli/mantine-depth-select';
-import { Card, Group, Stack, Text, Title } from '@mantine/core';
+import { Card, SegmentedControl, Stack, Text, Title } from '@mantine/core';
 import { MantineDemo } from '@mantinex/demo';
 
 const ITEMS: DepthSelectItem[] = [
@@ -39,7 +40,8 @@ const ITEMS: DepthSelectItem[] = [
 ];
 
 const code = `
-import { Card, Group, Stack, Text, Title } from '@mantine/core';
+import { useState } from 'react';
+import { Card, SegmentedControl, Stack, Text, Title } from '@mantine/core';
 import { DepthSelect, DepthSelectItem } from '@gfazioli/mantine-depth-select';
 
 const data: DepthSelectItem[] = [
@@ -49,68 +51,61 @@ const data: DepthSelectItem[] = [
 ];
 
 function Demo() {
+  const [justify, setJustify] = useState<'start' | 'center' | 'end'>('center');
+
   return (
-    <Group justify="center" align="flex-start" gap="xl">
-      <Stack align="center" gap="xs">
-        <Text size="xs" c="dimmed">justify="start"</Text>
-        <DepthSelect data={data} w={200} h={200}
-          controlsProps={{ justify: 'start', labelFormatter: (item) => String(item.value) }}
-        />
-      </Stack>
-      <Stack align="center" gap="xs">
-        <Text size="xs" c="dimmed">justify="center" (default)</Text>
-        <DepthSelect data={data} w={200} h={200}
-          controlsProps={{ labelFormatter: (item) => String(item.value) }}
-        />
-      </Stack>
-      <Stack align="center" gap="xs">
-        <Text size="xs" c="dimmed">justify="end"</Text>
-        <DepthSelect data={data} w={200} h={200}
-          controlsProps={{ justify: 'end', labelFormatter: (item) => String(item.value) }}
-        />
-      </Stack>
-    </Group>
+    <Stack align="center" gap="md">
+      <SegmentedControl
+        value={justify}
+        onChange={(val) => setJustify(val as 'start' | 'center' | 'end')}
+        data={[
+          { value: 'start', label: 'Start' },
+          { value: 'center', label: 'Center' },
+          { value: 'end', label: 'End' },
+        ]}
+        size="xs"
+      />
+      <DepthSelect
+        data={data}
+        w={350}
+        h={200}
+        controlsProps={{
+          justify,
+          w: 80,
+          labelFormatter: (item) => String(item.value),
+        }}
+      />
+    </Stack>
   );
 }
 `;
 
 function Demo() {
+  const [justify, setJustify] = useState<'start' | 'center' | 'end'>('center');
+
   return (
-    <Group justify="center" align="flex-start" gap="xl" pt={40}>
-      <Stack align="center" gap="xs">
-        <Text size="xs" c="dimmed">
-          justify=&quot;start&quot;
-        </Text>
-        <DepthSelect
-          data={ITEMS}
-          w={200}
-          h={200}
-          controlsProps={{ justify: 'start', labelFormatter: (item) => String(item.value) }}
-        />
-      </Stack>
-      <Stack align="center" gap="xs">
-        <Text size="xs" c="dimmed">
-          justify=&quot;center&quot;
-        </Text>
-        <DepthSelect
-          data={ITEMS}
-          w={200}
-          h={200}
-          controlsProps={{ labelFormatter: (item) => String(item.value) }}
-        />
-      </Stack>
-      <Stack align="center" gap="xs">
-        <Text size="xs" c="dimmed">
-          justify=&quot;end&quot;
-        </Text>
-        <DepthSelect
-          data={ITEMS}
-          w={200}
-          h={200}
-          controlsProps={{ justify: 'end', labelFormatter: (item) => String(item.value) }}
-        />
-      </Stack>
-    </Group>
+    <Stack align="center" gap="md" pt={60} pb={60}>
+      <DepthSelect
+        data={ITEMS}
+        w={350}
+        h={200}
+        controlsProps={{
+          justify,
+          w: 80,
+          labelFormatter: (item) => String(item.value),
+        }}
+      />
+      <SegmentedControl
+        value={justify}
+        onChange={(val) => setJustify(val as 'start' | 'center' | 'end')}
+        data={[
+          { value: 'start', label: 'Start' },
+          { value: 'center', label: 'Center' },
+          { value: 'end', label: 'End' },
+        ]}
+        size="xs"
+      />
+    </Stack>
   );
 }
 
