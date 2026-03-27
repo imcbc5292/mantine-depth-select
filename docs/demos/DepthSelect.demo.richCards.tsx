@@ -134,9 +134,14 @@ function Demo() {
 
   return (
     <Stack pt={80} pb={80}>
-      <DepthSelect data={data} value={value} onChange={setValue}>
-        <DepthSelect.Controls labelFormatter={(item) => String(item.value)} />
-      </DepthSelect>
+      <DepthSelect
+        data={data}
+        value={value}
+        onChange={setValue}
+        controlsLabelFormatter={(item) => String(item.value)}
+        w={400}
+        h={340}
+      />
     </Stack>
   );
 }
@@ -147,7 +152,15 @@ function Demo() {
 
   return (
     <Stack pt={80} pb={80}>
-      <DepthSelect data={ITEMS} value={value} onChange={setValue} w={400} h={340} mx="auto" />
+      <DepthSelect
+        data={ITEMS}
+        value={value}
+        onChange={setValue}
+        controlsLabelFormatter={(item) => String(item.value)}
+        w={400}
+        h={340}
+        mx="auto"
+      />
     </Stack>
   );
 }

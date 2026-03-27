@@ -43,6 +43,23 @@ Time Machine-like layout:
 
 <Demo data={demos.controlled} />
 
+## Custom controls
+
+Set `withControls={false}` to hide the built-in
+navigation and use your own controls. Use `value`
+and `onChange` to manage navigation externally:
+
+<Demo data={demos.customControls} />
+
+## Controls as children
+
+You can also use `DepthSelect.Controls` as a child
+component with `withControls={false}`. This gives you
+access to props like `labelFormatter` directly on
+the controls:
+
+<Demo data={demos.controlsAsChildren} />
+
 ## Rich cards
 
 You can use any React content inside items. Here is

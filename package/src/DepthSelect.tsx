@@ -63,6 +63,12 @@ export interface DepthSelectBaseProps {
   /** Position of the controls relative to the stack, @default "right" */
   controlsPosition?: DepthSelectControlsPosition;
 
+  /** Custom formatter for the label between arrows in built-in controls */
+  controlsLabelFormatter?: (item: {
+    value: string | number;
+    view: React.ReactNode;
+  }) => React.ReactNode;
+
   /** Transition duration in ms, @default 400 */
   transitionDuration?: number;
 
@@ -174,6 +180,7 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
     visibleCards,
     withControls,
     controlsPosition,
+    controlsLabelFormatter,
     transitionDuration,
     scaleStep,
     translateYStep,
@@ -329,7 +336,7 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
             );
           })}
         </Box>
-        {withControls && <DepthSelectControls />}
+        {withControls && <DepthSelectControls labelFormatter={controlsLabelFormatter} />}
         {children}
       </Box>
     </DepthSelectProvider>
