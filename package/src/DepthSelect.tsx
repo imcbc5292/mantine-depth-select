@@ -75,6 +75,9 @@ export interface DepthSelectBaseProps {
   /** Blur increment per depth level in px, @default 1 */
   blurStep?: number;
 
+  /** Accessible label for the component, @default "Depth select" */
+  ariaLabel?: string;
+
   /** Content rendered inside the component (Controls, etc.) */
   children?: React.ReactNode;
 }
@@ -133,6 +136,7 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
     translateYStep,
     opacityStep,
     blurStep,
+    ariaLabel,
     children,
 
     classNames,
@@ -186,13 +190,36 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
     }
   };
 
+  const goFirst = () => {
+    if (items.length > 0) {
+      handleChange(items[0].value);
+    }
+  };
+
+  const goLast = () => {
+    if (items.length > 0) {
+      handleChange(items[items.length - 1].value);
+    }
+  };
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === 'ArrowUp') {
-      event.preventDefault();
-      goNext();
-    } else if (event.key === 'ArrowDown') {
-      event.preventDefault();
-      goPrevious();
+    switch (event.key) {
+      case 'ArrowUp':
+        event.preventDefault();
+        goNext();
+        break;
+      case 'ArrowDown':
+        event.preventDefault();
+        goPrevious();
+        break;
+      case 'Home':
+        event.preventDefault();
+        goFirst();
+        break;
+      case 'End':
+        event.preventDefault();
+        goLast();
+        break;
     }
   };
 
@@ -224,6 +251,9 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
         {...others}
         mod={[{ 'controls-position': controlsPosition }, mod]}
         tabIndex={0}
+        role="listbox"
+        aria-label={ariaLabel || 'Depth select'}
+        aria-activedescendant={activeItem ? `ds-item-${activeItem.value}` : undefined}
         onKeyDown={handleKeyDown}
       >
         <Box {...getStyles('stack')}>
@@ -234,13 +264,17 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
               filter: depth > 0 ? `blur(${(blurStep || 1) * depth}px)` : undefined,
               zIndex: (visibleCards || 4) - depth,
               cursor: depth === 1 ? 'pointer' : undefined,
+              pointerEvents: depth > 1 ? 'none' : undefined,
             };
 
             return (
               <Box
                 key={item.value}
+                id={`ds-item-${item.value}`}
                 {...getStyles('card')}
                 style={cardStyle}
+                role="option"
+                aria-selected={depth === 0}
                 data-active={depth === 0 || undefined}
                 data-depth={depth}
                 onClick={depth === 1 ? () => handleCardClick(depth) : undefined}

@@ -2,6 +2,13 @@
   position: relative;
   display: flex;
   align-items: center;
+  outline: none;
+
+  &:focus-visible {
+    outline: 2px solid var(--mantine-primary-color-filled);
+    outline-offset: 2px;
+    border-radius: var(--mantine-radius-sm);
+  }
 
   &[data-controls-position='bottom'] {
     flex-direction: column;
@@ -71,6 +78,10 @@
     background-color: var(--mantine-color-gray-light-hover);
   }
 
+  &:active:not([data-disabled]) {
+    background-color: var(--mantine-color-gray-light-color);
+  }
+
   &[data-disabled] {
     opacity: 0.4;
     cursor: not-allowed;
@@ -81,4 +92,5 @@
   font-size: var(--mantine-font-size-sm);
   color: var(--mantine-color-dimmed);
   text-align: center;
+  user-select: none;
 }

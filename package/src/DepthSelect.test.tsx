@@ -12,6 +12,8 @@ const TEST_DATA: DepthSelectItem[] = [
 ];
 
 describe('DepthSelect', () => {
+  // Rendering
+
   it('renders without crashing', () => {
     const { container } = render(<DepthSelect />);
     expect(container).toBeTruthy();
@@ -63,7 +65,7 @@ describe('DepthSelect', () => {
     expect(cards.length).toBe(0);
   });
 
-  // Navigation tests
+  // Navigation — Arrow keys
 
   it('navigates to next item on ArrowUp key', () => {
     const onChange = jest.fn();
@@ -105,6 +107,30 @@ describe('DepthSelect', () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
+  // Navigation — Home/End keys
+
+  it('navigates to last item on End key', () => {
+    const onChange = jest.fn();
+    const { container } = render(
+      <DepthSelect data={TEST_DATA} defaultValue="item-1" onChange={onChange} />
+    );
+    const root = container.querySelector('[tabindex="0"]')!;
+    fireEvent.keyDown(root, { key: 'End' });
+    expect(onChange).toHaveBeenCalledWith('item-5');
+  });
+
+  it('navigates to first item on Home key', () => {
+    const onChange = jest.fn();
+    const { container } = render(
+      <DepthSelect data={TEST_DATA} defaultValue="item-4" onChange={onChange} />
+    );
+    const root = container.querySelector('[tabindex="0"]')!;
+    fireEvent.keyDown(root, { key: 'Home' });
+    expect(onChange).toHaveBeenCalledWith('item-1');
+  });
+
+  // Navigation — Click
+
   it('navigates to next item when clicking the second card', () => {
     const onChange = jest.fn();
     const { container } = render(
@@ -135,13 +161,45 @@ describe('DepthSelect', () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
+  // Accessibility
+
   it('has tabIndex for keyboard focus', () => {
     const { container } = render(<DepthSelect data={TEST_DATA} />);
     const root = container.querySelector('[tabindex="0"]');
     expect(root).toBeTruthy();
   });
 
-  // Controls sub-component tests
+  it('has role="listbox" on root', () => {
+    const { container } = render(<DepthSelect data={TEST_DATA} />);
+    const root = container.querySelector('[role="listbox"]');
+    expect(root).toBeTruthy();
+  });
+
+  it('has role="option" on cards', () => {
+    const { container } = render(<DepthSelect data={TEST_DATA} />);
+    const options = container.querySelectorAll('[role="option"]');
+    expect(options.length).toBeGreaterThan(0);
+  });
+
+  it('marks active card with aria-selected=true', () => {
+    const { container } = render(<DepthSelect data={TEST_DATA} />);
+    const activeCard = container.querySelector('[data-active]');
+    expect(activeCard?.getAttribute('aria-selected')).toBe('true');
+  });
+
+  it('uses default aria-label', () => {
+    const { container } = render(<DepthSelect data={TEST_DATA} />);
+    const root = container.querySelector('[aria-label="Depth select"]');
+    expect(root).toBeTruthy();
+  });
+
+  it('supports custom aria-label', () => {
+    const { container } = render(<DepthSelect data={TEST_DATA} ariaLabel="Select a snapshot" />);
+    const root = container.querySelector('[aria-label="Select a snapshot"]');
+    expect(root).toBeTruthy();
+  });
+
+  // Controls sub-component
 
   it('renders Controls sub-component', () => {
     const { container } = render(
@@ -183,7 +241,7 @@ describe('DepthSelect', () => {
     expect(container.textContent).toContain('Selected: item-2');
   });
 
-  // Controls position tests
+  // Controls position
 
   it('sets controls-position data attribute on root', () => {
     const { container } = render(
