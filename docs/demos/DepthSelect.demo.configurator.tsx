@@ -94,8 +94,8 @@ export const configurator: MantineDemo = {
     {
       type: 'segmented',
       prop: 'controlsPosition',
-      initialValue: 'bottom',
-      libraryValue: 'bottom',
+      initialValue: 'right',
+      libraryValue: 'right',
       data: [
         { value: 'bottom', label: 'Bottom' },
         { value: 'left', label: 'Left' },

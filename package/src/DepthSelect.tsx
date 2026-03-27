@@ -57,7 +57,7 @@ export interface DepthSelectBaseProps {
   /** Number of cards visible in the stack, @default 4 */
   visibleCards?: number;
 
-  /** Position of the controls relative to the stack, @default "bottom" */
+  /** Position of the controls relative to the stack, @default "right" */
   controlsPosition?: DepthSelectControlsPosition;
 
   /** Transition duration in ms, @default 400 */
@@ -98,7 +98,7 @@ export type DepthSelectFactory = Factory<{
 const defaultProps: Partial<DepthSelectProps> = {
   data: [],
   visibleCards: 4,
-  controlsPosition: 'bottom',
+  controlsPosition: 'right',
   transitionDuration: 400,
   scaleStep: 0.06,
   translateYStep: 30,
@@ -121,6 +121,47 @@ const varsResolver = createVarsResolver<DepthSelectFactory>(
     },
   })
 );
+
+function getCardStyle(
+  relativeIndex: number,
+  maxVisible: number,
+  scaleStep: number,
+  translateYStep: number,
+  opacityStep: number,
+  blurStep: number
+): React.CSSProperties {
+  if (relativeIndex < 0) {
+    // Exited: already passed, "in front of" viewer
+    return {
+      transform: `scale(${1 + scaleStep * 2}) translateY(${translateYStep * 2}px)`,
+      opacity: 0,
+      filter: `blur(${blurStep * 2}px)`,
+      zIndex: maxVisible + 1,
+      pointerEvents: 'none',
+    };
+  }
+
+  if (relativeIndex < maxVisible) {
+    // Visible stack: depth 0 (active) through maxVisible-1
+    return {
+      transform: `scale(${1 - scaleStep * relativeIndex}) translateY(${-translateYStep * relativeIndex}px)`,
+      opacity: 1 - opacityStep * relativeIndex,
+      filter: relativeIndex > 0 ? `blur(${blurStep * relativeIndex}px)` : undefined,
+      zIndex: maxVisible - relativeIndex,
+      cursor: relativeIndex === 1 ? 'pointer' : undefined,
+      pointerEvents: relativeIndex > 1 ? 'none' : undefined,
+    };
+  }
+
+  // Hidden: too deep in the stack
+  return {
+    transform: `scale(${1 - scaleStep * maxVisible}) translateY(${-translateYStep * maxVisible}px)`,
+    opacity: 0,
+    filter: `blur(${blurStep * maxVisible}px)`,
+    zIndex: 0,
+    pointerEvents: 'none',
+  };
+}
 
 export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
   const props = useProps('DepthSelect', defaultProps, _props);
@@ -163,6 +204,11 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
   });
 
   const items = data || [];
+  const maxVisible = visibleCards || 4;
+  const _scaleStep = scaleStep || 0.06;
+  const _translateYStep = translateYStep || 30;
+  const _opacityStep = opacityStep || 0.15;
+  const _blurStep = blurStep || 1;
 
   const [_value, handleChange] = useUncontrolled({
     value,
@@ -223,14 +269,6 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
     }
   };
 
-  const handleCardClick = (depth: number) => {
-    if (depth === 1) {
-      goNext();
-    }
-  };
-
-  const visibleItems = items.slice(activeIndex, activeIndex + (visibleCards || 4));
-
   return (
     <DepthSelectProvider
       value={{
@@ -242,7 +280,7 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
         canGoPrevious,
         goNext,
         goPrevious,
-        controlsPosition: controlsPosition || 'bottom',
+        controlsPosition: controlsPosition || 'right',
       }}
     >
       <Box
@@ -257,15 +295,16 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
         onKeyDown={handleKeyDown}
       >
         <Box {...getStyles('stack')}>
-          {visibleItems.map((item, depth) => {
-            const cardStyle: React.CSSProperties = {
-              transform: `scale(${1 - (scaleStep || 0.06) * depth}) translateY(${-(translateYStep || 30) * depth}px)`,
-              opacity: 1 - (opacityStep || 0.15) * depth,
-              filter: depth > 0 ? `blur(${(blurStep || 1) * depth}px)` : undefined,
-              zIndex: (visibleCards || 4) - depth,
-              cursor: depth === 1 ? 'pointer' : undefined,
-              pointerEvents: depth > 1 ? 'none' : undefined,
-            };
+          {items.map((item, itemIndex) => {
+            const relativeIndex = itemIndex - activeIndex;
+            const cardStyle = getCardStyle(
+              relativeIndex,
+              maxVisible,
+              _scaleStep,
+              _translateYStep,
+              _opacityStep,
+              _blurStep
+            );
 
             return (
               <Box
@@ -274,10 +313,12 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
                 {...getStyles('card')}
                 style={cardStyle}
                 role="option"
-                aria-selected={depth === 0}
-                data-active={depth === 0 || undefined}
-                data-depth={depth}
-                onClick={depth === 1 ? () => handleCardClick(depth) : undefined}
+                aria-selected={relativeIndex === 0}
+                aria-hidden={relativeIndex !== 0 || undefined}
+                data-active={relativeIndex === 0 || undefined}
+                data-depth={relativeIndex >= 0 ? relativeIndex : undefined}
+                data-exited={relativeIndex < 0 || undefined}
+                onClick={relativeIndex === 1 ? goNext : undefined}
               >
                 {item.view}
               </Box>

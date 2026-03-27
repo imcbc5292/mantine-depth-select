@@ -1,7 +1,6 @@
 .root {
   position: relative;
   display: flex;
-  align-items: center;
   outline: none;
 
   &:focus-visible {
@@ -12,14 +11,17 @@
 
   &[data-controls-position='bottom'] {
     flex-direction: column;
+    align-items: center;
   }
 
   &[data-controls-position='right'] {
     flex-direction: row;
+    align-items: stretch;
   }
 
   &[data-controls-position='left'] {
     flex-direction: row-reverse;
+    align-items: stretch;
   }
 }
 
@@ -48,6 +50,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: var(--mantine-spacing-xs);
 
   [data-controls-position='bottom'] > & {

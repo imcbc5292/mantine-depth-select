@@ -30,10 +30,21 @@ describe('DepthSelect', () => {
     expect(ref.current).toBeTruthy();
   });
 
-  it('renders visible cards based on visibleCards prop', () => {
+  it('renders all items in the DOM', () => {
+    const { container } = render(<DepthSelect data={TEST_DATA} />);
+    const cards = container.querySelectorAll('[role="option"]');
+    expect(cards.length).toBe(5);
+  });
+
+  it('assigns depth attributes to non-exited cards', () => {
     const { container } = render(<DepthSelect data={TEST_DATA} visibleCards={3} />);
-    const cards = container.querySelectorAll('[data-depth]');
-    expect(cards.length).toBe(3);
+    // All items from activeIndex onward get data-depth (relativeIndex >= 0)
+    const depthCards = container.querySelectorAll('[data-depth]');
+    expect(depthCards.length).toBe(5); // all 5 items start at activeIndex=0, all have relativeIndex >= 0
+    // Only 3 are in the visible range (opacity > 0)
+    expect(container.querySelector('[data-depth="0"]')).toBeTruthy();
+    expect(container.querySelector('[data-depth="1"]')).toBeTruthy();
+    expect(container.querySelector('[data-depth="2"]')).toBeTruthy();
   });
 
   it('marks first card as active', () => {
@@ -45,11 +56,10 @@ describe('DepthSelect', () => {
 
   it('assigns correct depth data attributes', () => {
     const { container } = render(<DepthSelect data={TEST_DATA} visibleCards={4} />);
-    const cards = container.querySelectorAll('[data-depth]');
-    expect(cards.length).toBe(4);
-    cards.forEach((card, index) => {
-      expect(card.getAttribute('data-depth')).toBe(String(index));
-    });
+    for (let i = 0; i < 4; i++) {
+      const card = container.querySelector(`[data-depth="${i}"]`);
+      expect(card).toBeTruthy();
+    }
   });
 
   it('renders correct card when value is controlled', () => {
@@ -61,8 +71,15 @@ describe('DepthSelect', () => {
 
   it('renders empty when data is empty', () => {
     const { container } = render(<DepthSelect data={[]} />);
-    const cards = container.querySelectorAll('[data-depth]');
+    const cards = container.querySelectorAll('[role="option"]');
     expect(cards.length).toBe(0);
+  });
+
+  it('marks exited cards with data-exited', () => {
+    const { container } = render(<DepthSelect data={TEST_DATA} value="item-3" />);
+    const exitedCards = container.querySelectorAll('[data-exited]');
+    // item-1 and item-2 are exited (relativeIndex < 0)
+    expect(exitedCards.length).toBe(2);
   });
 
   // Navigation — Arrow keys
@@ -178,7 +195,7 @@ describe('DepthSelect', () => {
   it('has role="option" on cards', () => {
     const { container } = render(<DepthSelect data={TEST_DATA} />);
     const options = container.querySelectorAll('[role="option"]');
-    expect(options.length).toBeGreaterThan(0);
+    expect(options.length).toBe(5);
   });
 
   it('marks active card with aria-selected=true', () => {
@@ -245,21 +262,21 @@ describe('DepthSelect', () => {
 
   it('sets controls-position data attribute on root', () => {
     const { container } = render(
-      <DepthSelect data={TEST_DATA} controlsPosition="right">
+      <DepthSelect data={TEST_DATA} controlsPosition="left">
         <DepthSelect.Controls />
       </DepthSelect>
     );
-    const root = container.querySelector('[data-controls-position="right"]');
+    const root = container.querySelector('[data-controls-position="left"]');
     expect(root).toBeTruthy();
   });
 
-  it('defaults to bottom controls position', () => {
+  it('defaults to right controls position', () => {
     const { container } = render(
       <DepthSelect data={TEST_DATA}>
         <DepthSelect.Controls />
       </DepthSelect>
     );
-    const root = container.querySelector('[data-controls-position="bottom"]');
+    const root = container.querySelector('[data-controls-position="right"]');
     expect(root).toBeTruthy();
   });
 });
