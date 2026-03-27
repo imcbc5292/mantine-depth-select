@@ -50,12 +50,20 @@ const data: DepthSelectItem[] = [
 ];
 
 function Demo() {
-  return <DepthSelect{{props}} data={data} />;
+  return (
+    <DepthSelect{{props}} data={data}>
+      <DepthSelect.Controls />
+    </DepthSelect>
+  );
 }
 `;
 
 function Demo(props: any) {
-  return <DepthSelect {...props} data={ITEMS} />;
+  return (
+    <DepthSelect {...props} data={ITEMS}>
+      <DepthSelect.Controls />
+    </DepthSelect>
+  );
 }
 
 export const stylesApi: MantineDemo = {

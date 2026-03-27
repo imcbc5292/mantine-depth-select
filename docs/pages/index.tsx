@@ -12,7 +12,7 @@ export default function HomePage() {
       <PageHeader data={PACKAGE_DATA} />
       <DocsTabs
         docgen={docgen}
-        componentsProps={['DepthSelect']}
+        componentsProps={['DepthSelect', 'DepthSelectControls']}
         componentsStyles={['DepthSelect']}
         componentPrefix="DepthSelect"
         stylesApiData={STYLES_API_DATA}

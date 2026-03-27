@@ -1,13 +1,25 @@
 .root {
   position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
+
+  &[data-controls-position='bottom'] {
+    flex-direction: column;
+  }
+
+  &[data-controls-position='right'] {
+    flex-direction: row;
+  }
+
+  &[data-controls-position='left'] {
+    flex-direction: row-reverse;
+  }
 }
 
 .stack {
   position: relative;
   width: 100%;
+  flex: 1;
 }
 
 .card {
@@ -23,4 +35,50 @@
   &[data-active] {
     position: relative;
   }
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--mantine-spacing-xs);
+
+  [data-controls-position='bottom'] > & {
+    margin-top: var(--mantine-spacing-md);
+  }
+
+  [data-controls-position='right'] > & {
+    margin-left: var(--mantine-spacing-md);
+  }
+
+  [data-controls-position='left'] > & {
+    margin-right: var(--mantine-spacing-md);
+  }
+}
+
+.controlUp,
+.controlDown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--mantine-radius-sm);
+  color: var(--mantine-color-text);
+  transition: background-color 150ms ease;
+
+  &:hover:not([data-disabled]) {
+    background-color: var(--mantine-color-gray-light-hover);
+  }
+
+  &[data-disabled] {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.controlLabel {
+  font-size: var(--mantine-font-size-sm);
+  color: var(--mantine-color-dimmed);
+  text-align: center;
 }

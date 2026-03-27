@@ -24,15 +24,21 @@ import '@gfazioli/mantine-depth-select/styles.layer.css';
 
 A 3D stack select component inspired by macOS Time Machine.
 Navigate through stacked cards with perspective transforms
-and smooth transitions.
+and smooth transitions. Use keyboard arrows, click the
+second card, or use the `DepthSelect.Controls`
+sub-component to navigate.
+
+The `controlsPosition` prop controls where the navigation
+arrows are placed: `bottom` (default), `left`,
+or `right`.
 
 <Demo data={demos.configurator} />
 
 ## Controlled
 
-The DepthSelect component supports both controlled and
-uncontrolled modes. Use the `value` prop for controlled
-mode:
+Use `value` and `onChange` for controlled mode. The
+example below shows `controlsPosition="right"` for a
+Time Machine-like layout:
 
 <Demo data={demos.controlled} />
 

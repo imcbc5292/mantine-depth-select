@@ -72,78 +72,48 @@ const SAMPLE_DATA: DepthSelectItem[] = [
 export function Usage() {
   return (
     <Stack gap="xl" p="md" maw={500} mx="auto">
-      <Title order={2}>DepthSelect — Static 3D Stack</Title>
-
+      <Title order={2}>DepthSelect — Controls Bottom (default)</Title>
       <Paper p="xl" withBorder>
-        <Text fw={500} mb="lg">
-          Default (4 visible cards)
-        </Text>
+        <DepthSelect data={SAMPLE_DATA}>
+          <DepthSelect.Controls labelFormatter={(item) => String(item.value)} />
+        </DepthSelect>
+      </Paper>
+    </Stack>
+  );
+}
+
+export function ControlsRight() {
+  return (
+    <Stack gap="xl" p="md" maw={600} mx="auto">
+      <Title order={2}>Controls Right (Time Machine style)</Title>
+      <Paper p="xl" withBorder>
+        <DepthSelect data={SAMPLE_DATA} controlsPosition="right">
+          <DepthSelect.Controls labelFormatter={(item) => String(item.value)} />
+        </DepthSelect>
+      </Paper>
+    </Stack>
+  );
+}
+
+export function ControlsLeft() {
+  return (
+    <Stack gap="xl" p="md" maw={600} mx="auto">
+      <Title order={2}>Controls Left</Title>
+      <Paper p="xl" withBorder>
+        <DepthSelect data={SAMPLE_DATA} controlsPosition="left">
+          <DepthSelect.Controls labelFormatter={(item) => String(item.value)} />
+        </DepthSelect>
+      </Paper>
+    </Stack>
+  );
+}
+
+export function NoControls() {
+  return (
+    <Stack gap="xl" p="md" maw={500} mx="auto">
+      <Title order={2}>No Controls (keyboard + click only)</Title>
+      <Paper p="xl" withBorder>
         <DepthSelect data={SAMPLE_DATA} />
-      </Paper>
-    </Stack>
-  );
-}
-
-export function CustomSteps() {
-  return (
-    <Stack gap="xl" p="md" maw={500} mx="auto">
-      <Paper p="xl" withBorder>
-        <Text fw={500} mb="lg">
-          More dramatic depth effect
-        </Text>
-        <DepthSelect
-          data={SAMPLE_DATA}
-          scaleStep={0.1}
-          translateYStep={40}
-          opacityStep={0.2}
-          blurStep={2}
-        />
-      </Paper>
-    </Stack>
-  );
-}
-
-export function SubtleEffect() {
-  return (
-    <Stack gap="xl" p="md" maw={500} mx="auto">
-      <Paper p="xl" withBorder>
-        <Text fw={500} mb="lg">
-          Subtle depth effect
-        </Text>
-        <DepthSelect
-          data={SAMPLE_DATA}
-          scaleStep={0.03}
-          translateYStep={20}
-          opacityStep={0.1}
-          blurStep={0.5}
-          visibleCards={5}
-        />
-      </Paper>
-    </Stack>
-  );
-}
-
-export function ControlledValue() {
-  return (
-    <Stack gap="xl" p="md" maw={500} mx="auto">
-      <Paper p="xl" withBorder>
-        <Text fw={500} mb="lg">
-          Starting from Snapshot 3
-        </Text>
-        <DepthSelect data={SAMPLE_DATA} value="snapshot-3" />
-      </Paper>
-    </Stack>
-  );
-}
-
-export function TwoCards() {
-  return (
-    <Stack gap="xl" p="md" maw={500} mx="auto">
-      <Paper p="xl" withBorder>
-        <Text fw={500} mb="lg">
-          Only 2 visible cards
-        </Text>
-        <DepthSelect data={SAMPLE_DATA} visibleCards={2} />
       </Paper>
     </Stack>
   );

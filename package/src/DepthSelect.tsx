@@ -10,6 +10,8 @@ import {
   useStyles,
 } from '@mantine/core';
 import { useUncontrolled } from '@mantine/hooks';
+import { DepthSelectProvider, type DepthSelectControlsPosition } from './DepthSelect.context';
+import { DepthSelectControls } from './DepthSelectControls';
 import classes from './DepthSelect.module.css';
 
 export interface DepthSelectItem {
@@ -20,7 +22,14 @@ export interface DepthSelectItem {
   view: React.ReactNode;
 }
 
-export type DepthSelectStylesNames = 'root' | 'stack' | 'card';
+export type DepthSelectStylesNames =
+  | 'root'
+  | 'stack'
+  | 'card'
+  | 'controls'
+  | 'controlUp'
+  | 'controlDown'
+  | 'controlLabel';
 
 export type DepthSelectCssVariables = {
   root:
@@ -48,6 +57,9 @@ export interface DepthSelectBaseProps {
   /** Number of cards visible in the stack, @default 4 */
   visibleCards?: number;
 
+  /** Position of the controls relative to the stack, @default "bottom" */
+  controlsPosition?: DepthSelectControlsPosition;
+
   /** Transition duration in ms, @default 400 */
   transitionDuration?: number;
 
@@ -62,6 +74,9 @@ export interface DepthSelectBaseProps {
 
   /** Blur increment per depth level in px, @default 1 */
   blurStep?: number;
+
+  /** Content rendered inside the component (Controls, etc.) */
+  children?: React.ReactNode;
 }
 
 export interface DepthSelectProps
@@ -72,11 +87,15 @@ export type DepthSelectFactory = Factory<{
   ref: HTMLDivElement;
   stylesNames: DepthSelectStylesNames;
   vars: DepthSelectCssVariables;
+  staticComponents: {
+    Controls: typeof DepthSelectControls;
+  };
 }>;
 
 const defaultProps: Partial<DepthSelectProps> = {
   data: [],
   visibleCards: 4,
+  controlsPosition: 'bottom',
   transitionDuration: 400,
   scaleStep: 0.06,
   translateYStep: 30,
@@ -108,11 +127,13 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
     defaultValue,
     onChange,
     visibleCards,
+    controlsPosition,
     transitionDuration,
     scaleStep,
     translateYStep,
     opacityStep,
     blurStep,
+    children,
 
     classNames,
     style,
@@ -148,6 +169,7 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
 
   const currentIndex = items.findIndex((item) => item.value === _value);
   const activeIndex = currentIndex >= 0 ? currentIndex : 0;
+  const activeItem = items[activeIndex];
 
   const canGoNext = activeIndex < items.length - 1;
   const canGoPrevious = activeIndex > 0;
@@ -183,41 +205,57 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
   const visibleItems = items.slice(activeIndex, activeIndex + (visibleCards || 4));
 
   return (
-    <Box
-      ref={ref}
-      {...getStyles('root')}
-      {...others}
-      mod={mod}
-      tabIndex={0}
-      onKeyDown={handleKeyDown}
+    <DepthSelectProvider
+      value={{
+        getStyles,
+        activeItem,
+        activeIndex,
+        items,
+        canGoNext,
+        canGoPrevious,
+        goNext,
+        goPrevious,
+        controlsPosition: controlsPosition || 'bottom',
+      }}
     >
-      <Box {...getStyles('stack')}>
-        {visibleItems.map((item, depth) => {
-          const cardStyle: React.CSSProperties = {
-            transform: `scale(${1 - (scaleStep || 0.06) * depth}) translateY(${-(translateYStep || 30) * depth}px)`,
-            opacity: 1 - (opacityStep || 0.15) * depth,
-            filter: depth > 0 ? `blur(${(blurStep || 1) * depth}px)` : undefined,
-            zIndex: (visibleCards || 4) - depth,
-            cursor: depth === 1 ? 'pointer' : undefined,
-          };
+      <Box
+        ref={ref}
+        {...getStyles('root')}
+        {...others}
+        mod={[{ 'controls-position': controlsPosition }, mod]}
+        tabIndex={0}
+        onKeyDown={handleKeyDown}
+      >
+        <Box {...getStyles('stack')}>
+          {visibleItems.map((item, depth) => {
+            const cardStyle: React.CSSProperties = {
+              transform: `scale(${1 - (scaleStep || 0.06) * depth}) translateY(${-(translateYStep || 30) * depth}px)`,
+              opacity: 1 - (opacityStep || 0.15) * depth,
+              filter: depth > 0 ? `blur(${(blurStep || 1) * depth}px)` : undefined,
+              zIndex: (visibleCards || 4) - depth,
+              cursor: depth === 1 ? 'pointer' : undefined,
+            };
 
-          return (
-            <Box
-              key={item.value}
-              {...getStyles('card')}
-              style={cardStyle}
-              data-active={depth === 0 || undefined}
-              data-depth={depth}
-              onClick={depth === 1 ? () => handleCardClick(depth) : undefined}
-            >
-              {item.view}
-            </Box>
-          );
-        })}
+            return (
+              <Box
+                key={item.value}
+                {...getStyles('card')}
+                style={cardStyle}
+                data-active={depth === 0 || undefined}
+                data-depth={depth}
+                onClick={depth === 1 ? () => handleCardClick(depth) : undefined}
+              >
+                {item.view}
+              </Box>
+            );
+          })}
+        </Box>
+        {children}
       </Box>
-    </Box>
+    </DepthSelectProvider>
   );
 });
 
 DepthSelect.classes = classes;
 DepthSelect.displayName = 'DepthSelect';
+DepthSelect.Controls = DepthSelectControls;

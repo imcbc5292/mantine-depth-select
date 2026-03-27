@@ -77,7 +77,9 @@ function Demo() {
 
   return (
     <Stack>
-      <DepthSelect data={data} value={value} />
+      <DepthSelect data={data} value={value} onChange={setValue} controlsPosition="right">
+        <DepthSelect.Controls labelFormatter={(item) => String(item.value)} />
+      </DepthSelect>
       <Group justify="center">
         {data.map((item) => (
           <Button key={item.value} onClick={() => setValue(item.value)} variant="light" size="xs">
@@ -95,7 +97,9 @@ function Demo() {
 
   return (
     <Stack>
-      <DepthSelect data={ITEMS} value={value} />
+      <DepthSelect data={ITEMS} value={value} onChange={setValue} controlsPosition="right">
+        <DepthSelect.Controls labelFormatter={(item) => String(item.value)} />
+      </DepthSelect>
       <Group justify="center">
         {ITEMS.map((item) => (
           <Button key={item.value} onClick={() => setValue(item.value)} variant="light" size="xs">

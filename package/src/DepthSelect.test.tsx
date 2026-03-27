@@ -140,4 +140,68 @@ describe('DepthSelect', () => {
     const root = container.querySelector('[tabindex="0"]');
     expect(root).toBeTruthy();
   });
+
+  // Controls sub-component tests
+
+  it('renders Controls sub-component', () => {
+    const { container } = render(
+      <DepthSelect data={TEST_DATA}>
+        <DepthSelect.Controls />
+      </DepthSelect>
+    );
+    expect(container.querySelector('button')).toBeTruthy();
+  });
+
+  it('Controls navigate via up/down buttons', () => {
+    const onChange = jest.fn();
+    const { container } = render(
+      <DepthSelect data={TEST_DATA} defaultValue="item-2" onChange={onChange}>
+        <DepthSelect.Controls />
+      </DepthSelect>
+    );
+    const buttons = container.querySelectorAll('button');
+    fireEvent.click(buttons[0]);
+    expect(onChange).toHaveBeenCalledWith('item-3');
+  });
+
+  it('Controls disables up button at the end', () => {
+    const { container } = render(
+      <DepthSelect data={TEST_DATA} defaultValue="item-5">
+        <DepthSelect.Controls />
+      </DepthSelect>
+    );
+    const upButton = container.querySelector('[data-disabled]');
+    expect(upButton).toBeTruthy();
+  });
+
+  it('Controls renders label via labelFormatter', () => {
+    const { container } = render(
+      <DepthSelect data={TEST_DATA} defaultValue="item-2">
+        <DepthSelect.Controls labelFormatter={(item) => `Selected: ${item.value}`} />
+      </DepthSelect>
+    );
+    expect(container.textContent).toContain('Selected: item-2');
+  });
+
+  // Controls position tests
+
+  it('sets controls-position data attribute on root', () => {
+    const { container } = render(
+      <DepthSelect data={TEST_DATA} controlsPosition="right">
+        <DepthSelect.Controls />
+      </DepthSelect>
+    );
+    const root = container.querySelector('[data-controls-position="right"]');
+    expect(root).toBeTruthy();
+  });
+
+  it('defaults to bottom controls position', () => {
+    const { container } = render(
+      <DepthSelect data={TEST_DATA}>
+        <DepthSelect.Controls />
+      </DepthSelect>
+    );
+    const root = container.querySelector('[data-controls-position="bottom"]');
+    expect(root).toBeTruthy();
+  });
 });

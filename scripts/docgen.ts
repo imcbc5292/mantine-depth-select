@@ -5,7 +5,10 @@ const getComponentPath = (componentPath: string) =>
   path.join(process.cwd(), 'package/src', componentPath);
 
 generateDeclarations({
-  componentsPaths: [getComponentPath('DepthSelect.tsx')],
+  componentsPaths: [
+    getComponentPath('DepthSelect.tsx'),
+    getComponentPath('DepthSelectControls.tsx'),
+  ],
   tsConfigPath: path.join(process.cwd(), 'tsconfig.json'),
   outputPath: path.join(process.cwd(), 'docs'),
 });

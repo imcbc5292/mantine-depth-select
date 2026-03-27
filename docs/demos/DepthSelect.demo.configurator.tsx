@@ -73,16 +73,35 @@ const data: DepthSelectItem[] = [
 ];
 
 function Demo() {
-  return <DepthSelect{{props}} data={data} />;
+  return (
+    <DepthSelect{{props}} data={data}>
+      <DepthSelect.Controls />
+    </DepthSelect>
+  );
 }
 `;
 
 export const configurator: MantineDemo = {
   type: 'configurator',
-  component: (props: any) => <DepthSelect {...props} data={ITEMS} />,
+  component: (props: any) => (
+    <DepthSelect {...props} data={ITEMS}>
+      <DepthSelect.Controls />
+    </DepthSelect>
+  ),
   code,
   centered: true,
   controls: [
+    {
+      type: 'segmented',
+      prop: 'controlsPosition',
+      initialValue: 'bottom',
+      libraryValue: 'bottom',
+      data: [
+        { value: 'bottom', label: 'Bottom' },
+        { value: 'left', label: 'Left' },
+        { value: 'right', label: 'Right' },
+      ],
+    },
     {
       type: 'number',
       prop: 'visibleCards',
