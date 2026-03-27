@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   Box,
   BoxProps,
@@ -63,7 +63,7 @@ export interface DepthSelectBaseProps {
   /** Transition duration in ms, @default 400 */
   transitionDuration?: number;
 
-  /** Scale reduction per depth level, @default 0.06 */
+  /** Scale reduction per depth level, @default 0.1 */
   scaleStep?: number;
 
   /** Vertical offset per depth level in px, @default 30 */
@@ -100,7 +100,7 @@ const defaultProps: Partial<DepthSelectProps> = {
   visibleCards: 4,
   controlsPosition: 'right',
   transitionDuration: 400,
-  scaleStep: 0.06,
+  scaleStep: 0.1,
   translateYStep: 30,
   opacityStep: 0.15,
   blurStep: 1,
@@ -131,7 +131,7 @@ function getCardStyle(
   blurStep: number
 ): React.CSSProperties {
   if (relativeIndex < 0) {
-    // Exited: already passed, "in front of" viewer
+    // Exited: already passed, "in front of" viewer — scale up, fade out, slide down
     return {
       transform: `scale(${1 + scaleStep * 2}) translateY(${translateYStep * 2}px)`,
       opacity: 0,
@@ -205,10 +205,24 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
 
   const items = data || [];
   const maxVisible = visibleCards || 4;
-  const _scaleStep = scaleStep || 0.06;
+  const _scaleStep = scaleStep || 0.1;
   const _translateYStep = translateYStep || 30;
   const _opacityStep = opacityStep || 0.15;
   const _blurStep = blurStep || 1;
+
+  // Measure the first card to set stable stack dimensions
+  const [stackSize, setStackSize] = useState<{ width: number; height: number } | null>(null);
+  const sizerRef = useCallback((node: HTMLDivElement | null) => {
+    if (node) {
+      const { offsetWidth, offsetHeight } = node;
+      setStackSize((prev) => {
+        if (prev && prev.width === offsetWidth && prev.height === offsetHeight) {
+          return prev;
+        }
+        return { width: offsetWidth, height: offsetHeight };
+      });
+    }
+  }, []);
 
   const [_value, handleChange] = useUncontrolled({
     value,
@@ -269,6 +283,10 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
     }
   };
 
+  const stackStyle: React.CSSProperties | undefined = stackSize
+    ? { minWidth: stackSize.width, minHeight: stackSize.height }
+    : undefined;
+
   return (
     <DepthSelectProvider
       value={{
@@ -294,9 +312,10 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
         aria-activedescendant={activeItem ? `ds-item-${activeItem.value}` : undefined}
         onKeyDown={handleKeyDown}
       >
-        <Box {...getStyles('stack')}>
+        <Box {...getStyles('stack')} style={stackStyle}>
           {items.map((item, itemIndex) => {
             const relativeIndex = itemIndex - activeIndex;
+            const isActive = relativeIndex === 0;
             const cardStyle = getCardStyle(
               relativeIndex,
               maxVisible,
@@ -309,13 +328,14 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
             return (
               <Box
                 key={item.value}
+                ref={isActive ? sizerRef : undefined}
                 id={`ds-item-${item.value}`}
                 {...getStyles('card')}
                 style={cardStyle}
                 role="option"
-                aria-selected={relativeIndex === 0}
-                aria-hidden={relativeIndex !== 0 || undefined}
-                data-active={relativeIndex === 0 || undefined}
+                aria-selected={isActive}
+                aria-hidden={!isActive || undefined}
+                data-active={isActive || undefined}
                 data-depth={relativeIndex >= 0 ? relativeIndex : undefined}
                 data-exited={relativeIndex < 0 || undefined}
                 onClick={relativeIndex === 1 ? goNext : undefined}

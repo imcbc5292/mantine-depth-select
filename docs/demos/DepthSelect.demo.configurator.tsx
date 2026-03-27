@@ -123,8 +123,8 @@ export const configurator: MantineDemo = {
     {
       type: 'number',
       prop: 'scaleStep',
-      initialValue: 0.06,
-      libraryValue: 0.06,
+      initialValue: 0.1,
+      libraryValue: 0.1,
       min: 0.01,
       max: 0.2,
       step: 0.01,
