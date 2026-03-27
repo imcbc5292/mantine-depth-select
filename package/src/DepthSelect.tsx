@@ -9,6 +9,7 @@ import {
   useProps,
   useStyles,
 } from '@mantine/core';
+import { useUncontrolled } from '@mantine/hooks';
 import classes from './DepthSelect.module.css';
 
 export interface DepthSelectItem {
@@ -40,6 +41,9 @@ export interface DepthSelectBaseProps {
 
   /** Uncontrolled: initial selected value (defaults to first item) */
   defaultValue?: string | number;
+
+  /** Called when the active value changes */
+  onChange?: (value: string | number) => void;
 
   /** Number of cards visible in the stack, @default 4 */
   visibleCards?: number;
@@ -102,6 +106,7 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
     data,
     value,
     defaultValue,
+    onChange,
     visibleCards,
     transitionDuration,
     scaleStep,
@@ -132,17 +137,60 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
     varsResolver,
   });
 
-  // Determine current index — for Phase 2, use controlled value or defaultValue or 0
   const items = data || [];
-  const currentValue = value ?? defaultValue ?? items[0]?.value;
-  const currentIndex = items.findIndex((item) => item.value === currentValue);
+
+  const [_value, handleChange] = useUncontrolled({
+    value,
+    defaultValue: defaultValue ?? items[0]?.value,
+    finalValue: items[0]?.value,
+    onChange,
+  });
+
+  const currentIndex = items.findIndex((item) => item.value === _value);
   const activeIndex = currentIndex >= 0 ? currentIndex : 0;
 
-  // Build the visible slice of cards starting from activeIndex
+  const canGoNext = activeIndex < items.length - 1;
+  const canGoPrevious = activeIndex > 0;
+
+  const goNext = () => {
+    if (canGoNext) {
+      handleChange(items[activeIndex + 1].value);
+    }
+  };
+
+  const goPrevious = () => {
+    if (canGoPrevious) {
+      handleChange(items[activeIndex - 1].value);
+    }
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      goNext();
+    } else if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      goPrevious();
+    }
+  };
+
+  const handleCardClick = (depth: number) => {
+    if (depth === 1) {
+      goNext();
+    }
+  };
+
   const visibleItems = items.slice(activeIndex, activeIndex + (visibleCards || 4));
 
   return (
-    <Box ref={ref} {...getStyles('root')} {...others} mod={mod}>
+    <Box
+      ref={ref}
+      {...getStyles('root')}
+      {...others}
+      mod={mod}
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+    >
       <Box {...getStyles('stack')}>
         {visibleItems.map((item, depth) => {
           const cardStyle: React.CSSProperties = {
@@ -150,6 +198,7 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
             opacity: 1 - (opacityStep || 0.15) * depth,
             filter: depth > 0 ? `blur(${(blurStep || 1) * depth}px)` : undefined,
             zIndex: (visibleCards || 4) - depth,
+            cursor: depth === 1 ? 'pointer' : undefined,
           };
 
           return (
@@ -159,6 +208,7 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
               style={cardStyle}
               data-active={depth === 0 || undefined}
               data-depth={depth}
+              onClick={depth === 1 ? () => handleCardClick(depth) : undefined}
             >
               {item.view}
             </Box>

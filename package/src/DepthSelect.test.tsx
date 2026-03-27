@@ -1,4 +1,5 @@
 import React from 'react';
+import { fireEvent } from '@testing-library/react';
 import { render } from '@mantine-tests/core';
 import { DepthSelect, DepthSelectItem } from './DepthSelect';
 
@@ -60,5 +61,83 @@ describe('DepthSelect', () => {
     const { container } = render(<DepthSelect data={[]} />);
     const cards = container.querySelectorAll('[data-depth]');
     expect(cards.length).toBe(0);
+  });
+
+  // Navigation tests
+
+  it('navigates to next item on ArrowUp key', () => {
+    const onChange = jest.fn();
+    const { container } = render(
+      <DepthSelect data={TEST_DATA} defaultValue="item-1" onChange={onChange} />
+    );
+    const root = container.querySelector('[tabindex="0"]')!;
+    fireEvent.keyDown(root, { key: 'ArrowUp' });
+    expect(onChange).toHaveBeenCalledWith('item-2');
+  });
+
+  it('navigates to previous item on ArrowDown key', () => {
+    const onChange = jest.fn();
+    const { container } = render(
+      <DepthSelect data={TEST_DATA} defaultValue="item-3" onChange={onChange} />
+    );
+    const root = container.querySelector('[tabindex="0"]')!;
+    fireEvent.keyDown(root, { key: 'ArrowDown' });
+    expect(onChange).toHaveBeenCalledWith('item-2');
+  });
+
+  it('does not navigate past the last item on ArrowUp', () => {
+    const onChange = jest.fn();
+    const { container } = render(
+      <DepthSelect data={TEST_DATA} defaultValue="item-5" onChange={onChange} />
+    );
+    const root = container.querySelector('[tabindex="0"]')!;
+    fireEvent.keyDown(root, { key: 'ArrowUp' });
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('does not navigate before the first item on ArrowDown', () => {
+    const onChange = jest.fn();
+    const { container } = render(
+      <DepthSelect data={TEST_DATA} defaultValue="item-1" onChange={onChange} />
+    );
+    const root = container.querySelector('[tabindex="0"]')!;
+    fireEvent.keyDown(root, { key: 'ArrowDown' });
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('navigates to next item when clicking the second card', () => {
+    const onChange = jest.fn();
+    const { container } = render(
+      <DepthSelect data={TEST_DATA} defaultValue="item-1" onChange={onChange} />
+    );
+    const secondCard = container.querySelector('[data-depth="1"]')!;
+    fireEvent.click(secondCard);
+    expect(onChange).toHaveBeenCalledWith('item-2');
+  });
+
+  it('does not navigate when clicking the active card', () => {
+    const onChange = jest.fn();
+    const { container } = render(
+      <DepthSelect data={TEST_DATA} defaultValue="item-1" onChange={onChange} />
+    );
+    const activeCard = container.querySelector('[data-depth="0"]')!;
+    fireEvent.click(activeCard);
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('does not navigate when clicking cards deeper than depth 1', () => {
+    const onChange = jest.fn();
+    const { container } = render(
+      <DepthSelect data={TEST_DATA} defaultValue="item-1" onChange={onChange} />
+    );
+    const thirdCard = container.querySelector('[data-depth="2"]')!;
+    fireEvent.click(thirdCard);
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('has tabIndex for keyboard focus', () => {
+    const { container } = render(<DepthSelect data={TEST_DATA} />);
+    const root = container.querySelector('[tabindex="0"]');
+    expect(root).toBeTruthy();
   });
 });
