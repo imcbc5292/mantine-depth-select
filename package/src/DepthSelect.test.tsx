@@ -30,16 +30,15 @@ describe('DepthSelect', () => {
     expect(ref.current).toBeTruthy();
   });
 
-  it('renders all items in the DOM', () => {
-    const { container } = render(<DepthSelect data={TEST_DATA} w={300} h={200} />);
+  it('renders items within the visible window', () => {
+    const { container } = render(<DepthSelect data={TEST_DATA} visibleCards={4} w={300} h={200} />);
     const cards = container.querySelectorAll('[role="option"]');
+    // Window: [activeIndex-1, activeIndex+visibleCards+1] = [-1, 5] clamped to [0, 5] = 5 items
     expect(cards.length).toBe(5);
   });
 
-  it('assigns depth attributes to non-exited cards', () => {
+  it('assigns depth attributes to visible cards', () => {
     const { container } = render(<DepthSelect data={TEST_DATA} visibleCards={3} w={300} h={200} />);
-    const depthCards = container.querySelectorAll('[data-depth]');
-    expect(depthCards.length).toBe(5);
     expect(container.querySelector('[data-depth="0"]')).toBeTruthy();
     expect(container.querySelector('[data-depth="1"]')).toBeTruthy();
     expect(container.querySelector('[data-depth="2"]')).toBeTruthy();
@@ -65,10 +64,11 @@ describe('DepthSelect', () => {
     expect(cards.length).toBe(0);
   });
 
-  it('marks exited cards with data-exited', () => {
+  it('marks exited card with data-exited', () => {
     const { container } = render(<DepthSelect data={TEST_DATA} value="item-3" w={300} h={200} />);
+    // Only 1 exited card rendered (activeIndex-1 window), not all previous
     const exitedCards = container.querySelectorAll('[data-exited]');
-    expect(exitedCards.length).toBe(2);
+    expect(exitedCards.length).toBe(1);
   });
 
   // Navigation — Arrow keys
@@ -237,5 +237,49 @@ describe('DepthSelect', () => {
     const { container } = render(<DepthSelect data={TEST_DATA} w={300} h={200} />);
     const root = container.querySelector('[data-controls-position="right"]');
     expect(root).toBeTruthy();
+  });
+
+  // Loop mode
+
+  it('wraps from last to first when loop is true', () => {
+    const onChange = jest.fn();
+    const { container } = render(
+      <DepthSelect
+        data={TEST_DATA}
+        defaultValue="item-5"
+        onChange={onChange}
+        loop
+        w={300}
+        h={200}
+      />
+    );
+    const root = container.querySelector('[tabindex="0"]')!;
+    fireEvent.keyDown(root, { key: 'ArrowUp' });
+    expect(onChange).toHaveBeenCalledWith('item-1');
+  });
+
+  it('wraps from first to last when loop is true', () => {
+    const onChange = jest.fn();
+    const { container } = render(
+      <DepthSelect
+        data={TEST_DATA}
+        defaultValue="item-1"
+        onChange={onChange}
+        loop
+        w={300}
+        h={200}
+      />
+    );
+    const root = container.querySelector('[tabindex="0"]')!;
+    fireEvent.keyDown(root, { key: 'ArrowDown' });
+    expect(onChange).toHaveBeenCalledWith('item-5');
+  });
+
+  it('does not disable controls in loop mode', () => {
+    const { container } = render(
+      <DepthSelect data={TEST_DATA} defaultValue="item-5" loop w={300} h={200} />
+    );
+    const disabledButton = container.querySelector('[data-disabled]');
+    expect(disabledButton).toBeFalsy();
   });
 });

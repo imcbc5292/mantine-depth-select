@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import {
   Box,
   BoxProps,
@@ -69,6 +69,9 @@ export interface DepthSelectBaseProps {
     view: React.ReactNode;
   }) => React.ReactNode;
 
+  /** Enable loop mode (wrap from last to first and vice versa), @default false */
+  loop?: boolean;
+
   /** Transition duration in ms, @default 400 */
   transitionDuration?: number;
 
@@ -109,6 +112,7 @@ const defaultProps: Partial<DepthSelectProps> = {
   visibleCards: 4,
   withControls: true,
   controlsPosition: 'right',
+  loop: false,
   transitionDuration: 400,
   scaleStep: 0.1,
   translateYStep: 30,
@@ -147,6 +151,7 @@ function getCardStyle(
       filter: `blur(${blurStep * 2}px)`,
       zIndex: maxVisible + 1,
       pointerEvents: 'none',
+      willChange: 'auto',
     };
   }
 
@@ -158,6 +163,7 @@ function getCardStyle(
       zIndex: maxVisible - relativeIndex,
       cursor: relativeIndex === 1 ? 'pointer' : undefined,
       pointerEvents: relativeIndex > 1 ? 'none' : undefined,
+      willChange: 'transform, opacity, filter',
     };
   }
 
@@ -167,6 +173,7 @@ function getCardStyle(
     filter: `blur(${blurStep * maxVisible}px)`,
     zIndex: 0,
     pointerEvents: 'none',
+    willChange: 'auto',
   };
 }
 
@@ -181,6 +188,7 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
     withControls,
     controlsPosition,
     controlsLabelFormatter,
+    loop,
     transitionDuration,
     scaleStep,
     translateYStep,
@@ -214,12 +222,8 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
     varsResolver,
   });
 
-  const items = data || [];
-  const maxVisible = visibleCards || 4;
-  const _scaleStep = scaleStep || 0.1;
-  const _translateYStep = translateYStep || 30;
-  const _opacityStep = opacityStep || 0.15;
-  const _blurStep = blurStep || 1;
+  const items = data!;
+  const maxVisible = visibleCards!;
 
   const [_value, handleChange] = useUncontrolled({
     value,
@@ -232,32 +236,42 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
   const activeIndex = currentIndex >= 0 ? currentIndex : 0;
   const activeItem = items[activeIndex];
 
-  const canGoNext = activeIndex < items.length - 1;
-  const canGoPrevious = activeIndex > 0;
+  const canGoNext = loop ? items.length > 1 : activeIndex < items.length - 1;
+  const canGoPrevious = loop ? items.length > 1 : activeIndex > 0;
 
-  const goNext = () => {
-    if (canGoNext) {
+  const goNext = useCallback(() => {
+    if (items.length === 0) {
+      return;
+    }
+    if (activeIndex < items.length - 1) {
       handleChange(items[activeIndex + 1].value);
+    } else if (loop) {
+      handleChange(items[0].value);
     }
-  };
+  }, [activeIndex, items, loop, handleChange]);
 
-  const goPrevious = () => {
-    if (canGoPrevious) {
+  const goPrevious = useCallback(() => {
+    if (items.length === 0) {
+      return;
+    }
+    if (activeIndex > 0) {
       handleChange(items[activeIndex - 1].value);
+    } else if (loop) {
+      handleChange(items[items.length - 1].value);
     }
-  };
+  }, [activeIndex, items, loop, handleChange]);
 
-  const goFirst = () => {
+  const goFirst = useCallback(() => {
     if (items.length > 0) {
       handleChange(items[0].value);
     }
-  };
+  }, [items, handleChange]);
 
-  const goLast = () => {
+  const goLast = useCallback(() => {
     if (items.length > 0) {
       handleChange(items[items.length - 1].value);
     }
-  };
+  }, [items, handleChange]);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     switch (event.key) {
@@ -280,6 +294,77 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
     }
   };
 
+  // Wheel navigation with cooldown
+  const wheelCooldownRef = useRef(false);
+  const handleWheel = useCallback(
+    (event: React.WheelEvent<HTMLDivElement>) => {
+      if (wheelCooldownRef.current || Math.abs(event.deltaY) < 10) {
+        return;
+      }
+      event.preventDefault();
+      wheelCooldownRef.current = true;
+      if (event.deltaY > 0) {
+        goNext();
+      } else {
+        goPrevious();
+      }
+      setTimeout(() => {
+        wheelCooldownRef.current = false;
+      }, transitionDuration || 400);
+    },
+    [goNext, goPrevious, transitionDuration]
+  );
+
+  // Touch swipe navigation
+  const touchStartRef = useRef<number | null>(null);
+  const handleTouchStart = useCallback((event: React.TouchEvent) => {
+    touchStartRef.current = event.touches[0].clientY;
+  }, []);
+
+  const handleTouchEnd = useCallback(
+    (event: React.TouchEvent) => {
+      if (touchStartRef.current === null) {
+        return;
+      }
+      const deltaY = touchStartRef.current - event.changedTouches[0].clientY;
+      touchStartRef.current = null;
+      if (Math.abs(deltaY) < 30) {
+        return;
+      }
+      if (deltaY > 0) {
+        goNext();
+      } else {
+        goPrevious();
+      }
+    },
+    [goNext, goPrevious]
+  );
+
+  // Memoize card styles: only recompute when activeIndex or step params change
+  const cardStyles = useMemo(() => {
+    const renderStart = Math.max(0, activeIndex - 1);
+    const renderEnd = Math.min(items.length, activeIndex + maxVisible + 1);
+    const stylesMap = new Map<number, React.CSSProperties>();
+    for (let i = renderStart; i < renderEnd; i++) {
+      stylesMap.set(
+        i,
+        getCardStyle(
+          i - activeIndex,
+          maxVisible,
+          scaleStep!,
+          translateYStep!,
+          opacityStep!,
+          blurStep!
+        )
+      );
+    }
+    return stylesMap;
+  }, [activeIndex, maxVisible, scaleStep, translateYStep, opacityStep, blurStep, items.length]);
+
+  // Render only cards within the visible window (perf: avoids N DOM nodes for large datasets)
+  const renderStart = Math.max(0, activeIndex - 1);
+  const renderEnd = Math.min(items.length, activeIndex + maxVisible + 1);
+
   return (
     <DepthSelectProvider
       value={{
@@ -291,7 +376,7 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
         canGoPrevious,
         goNext,
         goPrevious,
-        controlsPosition: controlsPosition || 'right',
+        controlsPosition: controlsPosition!,
       }}
     >
       <Box
@@ -304,18 +389,16 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
         aria-label={ariaLabel || 'Depth select'}
         aria-activedescendant={activeItem ? `ds-item-${activeItem.value}` : undefined}
         onKeyDown={handleKeyDown}
+        onWheel={handleWheel}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
       >
         <Box {...getStyles('stack')} w={w} h={h}>
-          {items.map((item, itemIndex) => {
+          {items.slice(renderStart, renderEnd).map((item, i) => {
+            const itemIndex = renderStart + i;
             const relativeIndex = itemIndex - activeIndex;
-            const cardStyle = getCardStyle(
-              relativeIndex,
-              maxVisible,
-              _scaleStep,
-              _translateYStep,
-              _opacityStep,
-              _blurStep
-            );
+            const isActive = relativeIndex === 0;
+            const cardStyle = cardStyles.get(itemIndex);
 
             return (
               <Box
@@ -324,9 +407,9 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
                 {...getStyles('card')}
                 style={cardStyle}
                 role="option"
-                aria-selected={relativeIndex === 0}
-                aria-hidden={relativeIndex !== 0 || undefined}
-                data-active={relativeIndex === 0 || undefined}
+                aria-selected={isActive}
+                aria-hidden={!isActive}
+                data-active={isActive || undefined}
                 data-depth={relativeIndex >= 0 ? relativeIndex : undefined}
                 data-exited={relativeIndex < 0 || undefined}
                 onClick={relativeIndex === 1 ? goNext : undefined}

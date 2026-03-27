@@ -25,23 +25,35 @@ import '@gfazioli/mantine-depth-select/styles.layer.css';
 A 3D stack select component inspired by macOS Time Machine.
 Navigate through stacked cards with perspective transforms
 and smooth transitions. Use keyboard arrows, click the
-second card, or use the `DepthSelect.Controls`
-sub-component to navigate.
+second card, mouse wheel, touch swipe, or use the
+built-in controls to navigate.
 
 The `controlsPosition` prop controls where the navigation
 arrows are placed: `right` (default) or `left`.
 Set `withControls={false}` to hide the built-in
 controls and use your own.
 
+You must set `w` and `h` props to define the area
+where cards live. Cards should use `h="100%"` to
+fill the available height.
+
 <Demo data={demos.configurator} />
 
 ## Controlled
 
-Use `value` and `onChange` for controlled mode. The
-example below shows `controlsPosition="right"` for a
-Time Machine-like layout:
+Use `value` and `onChange` for controlled mode.
+Navigation also works via keyboard (ArrowUp/Down,
+Home/End), mouse wheel, and touch swipe:
 
 <Demo data={demos.controlled} />
+
+## Loop
+
+Set `loop` to enable infinite navigation. When you
+reach the last item, the next navigation wraps back
+to the first item and vice versa:
+
+<Demo data={demos.loopDemo} />
 
 ## Custom controls
 
@@ -67,6 +79,32 @@ an example with decorated cards featuring images,
 badges and buttons:
 
 <Demo data={demos.richCards} />
+
+## Use cases
+
+### Pricing plan selector
+
+The depth stack creates a natural visual hierarchy,
+making the front card feel "recommended." Navigate
+between plans to compare features:
+
+<Demo data={demos.pricingPlans} />
+
+### Document version history
+
+Browse through document versions with author info
+and change summaries. The depth effect naturally
+communicates "older = further back":
+
+<Demo data={demos.versionHistory} />
+
+### Onboarding wizard
+
+A step-by-step onboarding flow where completed
+steps move behind the current one. More engaging
+than a traditional linear stepper:
+
+<Demo data={demos.onboarding} />
 
 ## Styles API
 

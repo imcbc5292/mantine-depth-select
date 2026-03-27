@@ -15,11 +15,11 @@ export interface DepthSelectControlsProps
   /** Custom formatter for the label between arrows */
   labelFormatter?: (item: { value: string | number; view: React.ReactNode }) => React.ReactNode;
 
-  /** Custom icon for the "previous" (up) button */
-  previousIcon?: React.ReactNode;
+  /** Custom icon for the up button (navigate deeper into the stack) */
+  upIcon?: React.ReactNode;
 
-  /** Custom icon for the "next" (down) button */
-  nextIcon?: React.ReactNode;
+  /** Custom icon for the down button (navigate back toward the front) */
+  downIcon?: React.ReactNode;
 }
 
 export type DepthSelectControlsFactory = Factory<{
@@ -62,7 +62,7 @@ const defaultProps: Partial<DepthSelectControlsProps> = {};
 
 export const DepthSelectControls = factory<DepthSelectControlsFactory>((_props, ref) => {
   const props = useProps('DepthSelectControls', defaultProps, _props);
-  const { labelFormatter, previousIcon, nextIcon, ...others } = props;
+  const { labelFormatter, upIcon, downIcon, ...others } = props;
 
   const ctx = useDepthSelectContext();
 
@@ -75,9 +75,9 @@ export const DepthSelectControls = factory<DepthSelectControlsFactory>((_props, 
         onClick={ctx.goNext}
         disabled={!ctx.canGoNext}
         data-disabled={!ctx.canGoNext || undefined}
-        aria-label="Go to next item"
+        aria-label="Navigate deeper into the stack"
       >
-        {previousIcon || defaultChevronUp}
+        {upIcon || defaultChevronUp}
       </UnstyledButton>
 
       {label != null && <Box {...ctx.getStyles('controlLabel')}>{label}</Box>}
@@ -87,9 +87,9 @@ export const DepthSelectControls = factory<DepthSelectControlsFactory>((_props, 
         onClick={ctx.goPrevious}
         disabled={!ctx.canGoPrevious}
         data-disabled={!ctx.canGoPrevious || undefined}
-        aria-label="Go to previous item"
+        aria-label="Navigate back toward the front"
       >
-        {nextIcon || defaultChevronDown}
+        {downIcon || defaultChevronDown}
       </UnstyledButton>
     </Box>
   );

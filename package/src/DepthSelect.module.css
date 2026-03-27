@@ -42,6 +42,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   gap: var(--mantine-spacing-xs);
 
   [data-controls-position='right'] > & {
@@ -72,6 +73,11 @@
     background-color: var(--mantine-color-gray-light-color);
   }
 
+  &:focus-visible {
+    outline: 2px solid var(--mantine-primary-color-filled);
+    outline-offset: 2px;
+  }
+
   &[data-disabled] {
     opacity: 0.4;
     cursor: not-allowed;
@@ -84,4 +90,10 @@
   text-align: center;
   user-select: none;
   white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
 }

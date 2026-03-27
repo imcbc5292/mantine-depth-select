@@ -96,6 +96,12 @@ export const configurator: MantineDemo = {
       ],
     },
     {
+      type: 'boolean',
+      prop: 'loop',
+      initialValue: false,
+      libraryValue: false,
+    },
+    {
       type: 'number',
       prop: 'visibleCards',
       initialValue: 4,
