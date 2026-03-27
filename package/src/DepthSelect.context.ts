@@ -1,7 +1,7 @@
 import { createSafeContext, type GetStylesApi } from '@mantine/core';
 import type { DepthSelectFactory, DepthSelectItem } from './DepthSelect';
 
-export type DepthSelectControlsPosition = 'bottom' | 'right' | 'left';
+export type DepthSelectControlsPosition = 'right' | 'left';
 
 export interface DepthSelectContextValue {
   getStyles: GetStylesApi<DepthSelectFactory>;

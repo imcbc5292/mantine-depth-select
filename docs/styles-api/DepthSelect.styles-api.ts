@@ -38,7 +38,7 @@ export const DepthSelectStylesApi: StylesApiData<DepthSelectFactory> = {
     {
       modifier: 'data-controls-position',
       selector: 'root',
-      value: 'bottom | right | left',
+      value: 'right | left',
       condition: 'Position of navigation controls relative to the stack',
     },
     {

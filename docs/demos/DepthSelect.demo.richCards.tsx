@@ -7,7 +7,7 @@ const ITEMS: DepthSelectItem[] = [
   {
     value: 'norway',
     view: (
-      <Card shadow="sm" padding="lg" radius="md" withBorder>
+      <Card shadow="sm" padding="lg" radius="md" withBorder h="100%">
         <Card.Section>
           <Image
             src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png"
@@ -32,7 +32,7 @@ const ITEMS: DepthSelectItem[] = [
   {
     value: 'hawaii',
     view: (
-      <Card shadow="sm" padding="lg" radius="md" withBorder>
+      <Card shadow="sm" padding="lg" radius="md" withBorder h="100%">
         <Card.Section>
           <Image
             src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-4.png"
@@ -56,7 +56,7 @@ const ITEMS: DepthSelectItem[] = [
   {
     value: 'alps',
     view: (
-      <Card shadow="sm" padding="lg" radius="md" withBorder>
+      <Card shadow="sm" padding="lg" radius="md" withBorder h="100%">
         <Card.Section>
           <Image
             src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-5.png"
@@ -81,7 +81,7 @@ const ITEMS: DepthSelectItem[] = [
   {
     value: 'safari',
     view: (
-      <Card shadow="sm" padding="lg" radius="md" withBorder>
+      <Card shadow="sm" padding="lg" radius="md" withBorder h="100%">
         <Card.Section>
           <Image
             src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-6.png"
@@ -113,7 +113,7 @@ const data: DepthSelectItem[] = [
   {
     value: 'norway',
     view: (
-      <Card shadow="sm" padding="lg" radius="md" withBorder>
+      <Card shadow="sm" padding="lg" radius="md" withBorder h="100%">
         <Card.Section>
           <Image src="..." height={160} alt="Norway" />
         </Card.Section>
@@ -133,7 +133,7 @@ function Demo() {
   const [value, setValue] = useState<string | number>('hawaii');
 
   return (
-    <Stack pt={80}>
+    <Stack pt={80} pb={80}>
       <DepthSelect data={data} value={value} onChange={setValue}>
         <DepthSelect.Controls labelFormatter={(item) => String(item.value)} />
       </DepthSelect>
@@ -146,10 +146,8 @@ function Demo() {
   const [value, setValue] = useState<string | number>('hawaii');
 
   return (
-    <Stack pt={80}>
-      <DepthSelect data={ITEMS} value={value} onChange={setValue} maw={400} mx="auto">
-        <DepthSelect.Controls labelFormatter={(item) => String(item.value)} />
-      </DepthSelect>
+    <Stack pt={80} pb={80}>
+      <DepthSelect data={ITEMS} value={value} onChange={setValue} w={400} h={340} mx="auto" />
     </Stack>
   );
 }

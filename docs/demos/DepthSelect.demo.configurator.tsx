@@ -6,7 +6,7 @@ const ITEMS: DepthSelectItem[] = [
   {
     value: 'snap-1',
     view: (
-      <Card shadow="sm" p="lg" withBorder>
+      <Card shadow="sm" p="lg" withBorder h="100%">
         <Title order={4}>Snapshot 1</Title>
         <Text size="sm" c="dimmed">
           Today
@@ -17,7 +17,7 @@ const ITEMS: DepthSelectItem[] = [
   {
     value: 'snap-2',
     view: (
-      <Card shadow="sm" p="lg" withBorder>
+      <Card shadow="sm" p="lg" withBorder h="100%">
         <Title order={4}>Snapshot 2</Title>
         <Text size="sm" c="dimmed">
           Yesterday
@@ -28,7 +28,7 @@ const ITEMS: DepthSelectItem[] = [
   {
     value: 'snap-3',
     view: (
-      <Card shadow="sm" p="lg" withBorder>
+      <Card shadow="sm" p="lg" withBorder h="100%">
         <Title order={4}>Snapshot 3</Title>
         <Text size="sm" c="dimmed">
           2 days ago
@@ -39,7 +39,7 @@ const ITEMS: DepthSelectItem[] = [
   {
     value: 'snap-4',
     view: (
-      <Card shadow="sm" p="lg" withBorder>
+      <Card shadow="sm" p="lg" withBorder h="100%">
         <Title order={4}>Snapshot 4</Title>
         <Text size="sm" c="dimmed">
           3 days ago
@@ -50,7 +50,7 @@ const ITEMS: DepthSelectItem[] = [
   {
     value: 'snap-5',
     view: (
-      <Card shadow="sm" p="lg" withBorder>
+      <Card shadow="sm" p="lg" withBorder h="100%">
         <Title order={4}>Snapshot 5</Title>
         <Text size="sm" c="dimmed">
           Last week
@@ -65,29 +65,23 @@ import { Card, Text, Title } from '@mantine/core';
 import { DepthSelect, DepthSelectItem } from '@gfazioli/mantine-depth-select';
 
 const data: DepthSelectItem[] = [
-  { value: 'snap-1', view: <Card shadow="sm" p="lg" withBorder><Title order={4}>Snapshot 1</Title><Text size="sm" c="dimmed">Today</Text></Card> },
-  { value: 'snap-2', view: <Card shadow="sm" p="lg" withBorder><Title order={4}>Snapshot 2</Title><Text size="sm" c="dimmed">Yesterday</Text></Card> },
-  { value: 'snap-3', view: <Card shadow="sm" p="lg" withBorder><Title order={4}>Snapshot 3</Title><Text size="sm" c="dimmed">2 days ago</Text></Card> },
-  { value: 'snap-4', view: <Card shadow="sm" p="lg" withBorder><Title order={4}>Snapshot 4</Title><Text size="sm" c="dimmed">3 days ago</Text></Card> },
-  { value: 'snap-5', view: <Card shadow="sm" p="lg" withBorder><Title order={4}>Snapshot 5</Title><Text size="sm" c="dimmed">Last week</Text></Card> },
+  { value: 'snap-1', view: <Card shadow="sm" p="lg" withBorder h="100%"><Title order={4}>Snapshot 1</Title><Text size="sm" c="dimmed">Today</Text></Card> },
+  { value: 'snap-2', view: <Card shadow="sm" p="lg" withBorder h="100%"><Title order={4}>Snapshot 2</Title><Text size="sm" c="dimmed">Yesterday</Text></Card> },
+  { value: 'snap-3', view: <Card shadow="sm" p="lg" withBorder h="100%"><Title order={4}>Snapshot 3</Title><Text size="sm" c="dimmed">2 days ago</Text></Card> },
+  { value: 'snap-4', view: <Card shadow="sm" p="lg" withBorder h="100%"><Title order={4}>Snapshot 4</Title><Text size="sm" c="dimmed">3 days ago</Text></Card> },
+  { value: 'snap-5', view: <Card shadow="sm" p="lg" withBorder h="100%"><Title order={4}>Snapshot 5</Title><Text size="sm" c="dimmed">Last week</Text></Card> },
 ];
 
 function Demo() {
   return (
-    <DepthSelect{{props}} data={data}>
-      <DepthSelect.Controls />
-    </DepthSelect>
+    <DepthSelect{{props}} data={data} w={400} h={150} />
   );
 }
 `;
 
 export const configurator: MantineDemo = {
   type: 'configurator',
-  component: (props: any) => (
-    <DepthSelect {...props} data={ITEMS}>
-      <DepthSelect.Controls />
-    </DepthSelect>
-  ),
+  component: (props: any) => <DepthSelect {...props} data={ITEMS} w={400} h={150} />,
   code,
   centered: true,
   controls: [
@@ -97,7 +91,6 @@ export const configurator: MantineDemo = {
       initialValue: 'right',
       libraryValue: 'right',
       data: [
-        { value: 'bottom', label: 'Bottom' },
         { value: 'left', label: 'Left' },
         { value: 'right', label: 'Right' },
       ],

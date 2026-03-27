@@ -1,6 +1,7 @@
 .root {
   position: relative;
   display: flex;
+  align-items: stretch;
   outline: none;
 
   &:focus-visible {
@@ -9,19 +10,12 @@
     border-radius: var(--mantine-radius-sm);
   }
 
-  &[data-controls-position='bottom'] {
-    flex-direction: column;
-    align-items: center;
-  }
-
   &[data-controls-position='right'] {
     flex-direction: row;
-    align-items: stretch;
   }
 
   &[data-controls-position='left'] {
     flex-direction: row-reverse;
-    align-items: stretch;
   }
 }
 
@@ -36,14 +30,11 @@
   top: 0;
   left: 0;
   width: 100%;
+  height: 100%;
   transition:
     transform var(--ds-transition-duration, 400ms) ease,
     opacity var(--ds-transition-duration, 400ms) ease,
     filter var(--ds-transition-duration, 400ms) ease;
-
-  &[data-active] {
-    position: relative;
-  }
 }
 
 .controls {
@@ -52,10 +43,6 @@
   align-items: center;
   justify-content: center;
   gap: var(--mantine-spacing-xs);
-
-  [data-controls-position='bottom'] > & {
-    margin-top: var(--mantine-spacing-md);
-  }
 
   [data-controls-position='right'] > & {
     margin-left: var(--mantine-spacing-md);

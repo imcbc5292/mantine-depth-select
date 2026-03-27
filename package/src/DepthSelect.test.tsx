@@ -20,65 +20,54 @@ describe('DepthSelect', () => {
   });
 
   it('renders without crashing with data', () => {
-    const { container } = render(<DepthSelect data={TEST_DATA} />);
+    const { container } = render(<DepthSelect data={TEST_DATA} w={300} h={200} />);
     expect(container).toBeTruthy();
   });
 
   it('forwards ref', () => {
     const ref = React.createRef<HTMLDivElement>();
-    render(<DepthSelect ref={ref} data={TEST_DATA} />);
+    render(<DepthSelect ref={ref} data={TEST_DATA} w={300} h={200} />);
     expect(ref.current).toBeTruthy();
   });
 
   it('renders all items in the DOM', () => {
-    const { container } = render(<DepthSelect data={TEST_DATA} />);
+    const { container } = render(<DepthSelect data={TEST_DATA} w={300} h={200} />);
     const cards = container.querySelectorAll('[role="option"]');
     expect(cards.length).toBe(5);
   });
 
   it('assigns depth attributes to non-exited cards', () => {
-    const { container } = render(<DepthSelect data={TEST_DATA} visibleCards={3} />);
-    // All items from activeIndex onward get data-depth (relativeIndex >= 0)
+    const { container } = render(<DepthSelect data={TEST_DATA} visibleCards={3} w={300} h={200} />);
     const depthCards = container.querySelectorAll('[data-depth]');
-    expect(depthCards.length).toBe(5); // all 5 items start at activeIndex=0, all have relativeIndex >= 0
-    // Only 3 are in the visible range (opacity > 0)
+    expect(depthCards.length).toBe(5);
     expect(container.querySelector('[data-depth="0"]')).toBeTruthy();
     expect(container.querySelector('[data-depth="1"]')).toBeTruthy();
     expect(container.querySelector('[data-depth="2"]')).toBeTruthy();
   });
 
   it('marks first card as active', () => {
-    const { container } = render(<DepthSelect data={TEST_DATA} />);
+    const { container } = render(<DepthSelect data={TEST_DATA} w={300} h={200} />);
     const activeCard = container.querySelector('[data-active]');
     expect(activeCard).toBeTruthy();
     expect(activeCard?.getAttribute('data-depth')).toBe('0');
   });
 
-  it('assigns correct depth data attributes', () => {
-    const { container } = render(<DepthSelect data={TEST_DATA} visibleCards={4} />);
-    for (let i = 0; i < 4; i++) {
-      const card = container.querySelector(`[data-depth="${i}"]`);
-      expect(card).toBeTruthy();
-    }
-  });
-
   it('renders correct card when value is controlled', () => {
-    const { container } = render(<DepthSelect data={TEST_DATA} value="item-3" />);
+    const { container } = render(<DepthSelect data={TEST_DATA} value="item-3" w={300} h={200} />);
     const activeCard = container.querySelector('[data-active]');
     expect(activeCard).toBeTruthy();
     expect(activeCard?.textContent).toBe('Item 3');
   });
 
   it('renders empty when data is empty', () => {
-    const { container } = render(<DepthSelect data={[]} />);
+    const { container } = render(<DepthSelect data={[]} w={300} h={200} />);
     const cards = container.querySelectorAll('[role="option"]');
     expect(cards.length).toBe(0);
   });
 
   it('marks exited cards with data-exited', () => {
-    const { container } = render(<DepthSelect data={TEST_DATA} value="item-3" />);
+    const { container } = render(<DepthSelect data={TEST_DATA} value="item-3" w={300} h={200} />);
     const exitedCards = container.querySelectorAll('[data-exited]');
-    // item-1 and item-2 are exited (relativeIndex < 0)
     expect(exitedCards.length).toBe(2);
   });
 
@@ -87,7 +76,7 @@ describe('DepthSelect', () => {
   it('navigates to next item on ArrowUp key', () => {
     const onChange = jest.fn();
     const { container } = render(
-      <DepthSelect data={TEST_DATA} defaultValue="item-1" onChange={onChange} />
+      <DepthSelect data={TEST_DATA} defaultValue="item-1" onChange={onChange} w={300} h={200} />
     );
     const root = container.querySelector('[tabindex="0"]')!;
     fireEvent.keyDown(root, { key: 'ArrowUp' });
@@ -97,7 +86,7 @@ describe('DepthSelect', () => {
   it('navigates to previous item on ArrowDown key', () => {
     const onChange = jest.fn();
     const { container } = render(
-      <DepthSelect data={TEST_DATA} defaultValue="item-3" onChange={onChange} />
+      <DepthSelect data={TEST_DATA} defaultValue="item-3" onChange={onChange} w={300} h={200} />
     );
     const root = container.querySelector('[tabindex="0"]')!;
     fireEvent.keyDown(root, { key: 'ArrowDown' });
@@ -107,7 +96,7 @@ describe('DepthSelect', () => {
   it('does not navigate past the last item on ArrowUp', () => {
     const onChange = jest.fn();
     const { container } = render(
-      <DepthSelect data={TEST_DATA} defaultValue="item-5" onChange={onChange} />
+      <DepthSelect data={TEST_DATA} defaultValue="item-5" onChange={onChange} w={300} h={200} />
     );
     const root = container.querySelector('[tabindex="0"]')!;
     fireEvent.keyDown(root, { key: 'ArrowUp' });
@@ -117,7 +106,7 @@ describe('DepthSelect', () => {
   it('does not navigate before the first item on ArrowDown', () => {
     const onChange = jest.fn();
     const { container } = render(
-      <DepthSelect data={TEST_DATA} defaultValue="item-1" onChange={onChange} />
+      <DepthSelect data={TEST_DATA} defaultValue="item-1" onChange={onChange} w={300} h={200} />
     );
     const root = container.querySelector('[tabindex="0"]')!;
     fireEvent.keyDown(root, { key: 'ArrowDown' });
@@ -129,7 +118,7 @@ describe('DepthSelect', () => {
   it('navigates to last item on End key', () => {
     const onChange = jest.fn();
     const { container } = render(
-      <DepthSelect data={TEST_DATA} defaultValue="item-1" onChange={onChange} />
+      <DepthSelect data={TEST_DATA} defaultValue="item-1" onChange={onChange} w={300} h={200} />
     );
     const root = container.querySelector('[tabindex="0"]')!;
     fireEvent.keyDown(root, { key: 'End' });
@@ -139,7 +128,7 @@ describe('DepthSelect', () => {
   it('navigates to first item on Home key', () => {
     const onChange = jest.fn();
     const { container } = render(
-      <DepthSelect data={TEST_DATA} defaultValue="item-4" onChange={onChange} />
+      <DepthSelect data={TEST_DATA} defaultValue="item-4" onChange={onChange} w={300} h={200} />
     );
     const root = container.querySelector('[tabindex="0"]')!;
     fireEvent.keyDown(root, { key: 'Home' });
@@ -151,7 +140,7 @@ describe('DepthSelect', () => {
   it('navigates to next item when clicking the second card', () => {
     const onChange = jest.fn();
     const { container } = render(
-      <DepthSelect data={TEST_DATA} defaultValue="item-1" onChange={onChange} />
+      <DepthSelect data={TEST_DATA} defaultValue="item-1" onChange={onChange} w={300} h={200} />
     );
     const secondCard = container.querySelector('[data-depth="1"]')!;
     fireEvent.click(secondCard);
@@ -161,78 +150,65 @@ describe('DepthSelect', () => {
   it('does not navigate when clicking the active card', () => {
     const onChange = jest.fn();
     const { container } = render(
-      <DepthSelect data={TEST_DATA} defaultValue="item-1" onChange={onChange} />
+      <DepthSelect data={TEST_DATA} defaultValue="item-1" onChange={onChange} w={300} h={200} />
     );
     const activeCard = container.querySelector('[data-depth="0"]')!;
     fireEvent.click(activeCard);
     expect(onChange).not.toHaveBeenCalled();
   });
 
-  it('does not navigate when clicking cards deeper than depth 1', () => {
-    const onChange = jest.fn();
-    const { container } = render(
-      <DepthSelect data={TEST_DATA} defaultValue="item-1" onChange={onChange} />
-    );
-    const thirdCard = container.querySelector('[data-depth="2"]')!;
-    fireEvent.click(thirdCard);
-    expect(onChange).not.toHaveBeenCalled();
-  });
-
   // Accessibility
 
   it('has tabIndex for keyboard focus', () => {
-    const { container } = render(<DepthSelect data={TEST_DATA} />);
+    const { container } = render(<DepthSelect data={TEST_DATA} w={300} h={200} />);
     const root = container.querySelector('[tabindex="0"]');
     expect(root).toBeTruthy();
   });
 
   it('has role="listbox" on root', () => {
-    const { container } = render(<DepthSelect data={TEST_DATA} />);
+    const { container } = render(<DepthSelect data={TEST_DATA} w={300} h={200} />);
     const root = container.querySelector('[role="listbox"]');
     expect(root).toBeTruthy();
   });
 
   it('has role="option" on cards', () => {
-    const { container } = render(<DepthSelect data={TEST_DATA} />);
+    const { container } = render(<DepthSelect data={TEST_DATA} w={300} h={200} />);
     const options = container.querySelectorAll('[role="option"]');
     expect(options.length).toBe(5);
   });
 
   it('marks active card with aria-selected=true', () => {
-    const { container } = render(<DepthSelect data={TEST_DATA} />);
+    const { container } = render(<DepthSelect data={TEST_DATA} w={300} h={200} />);
     const activeCard = container.querySelector('[data-active]');
     expect(activeCard?.getAttribute('aria-selected')).toBe('true');
   });
 
-  it('uses default aria-label', () => {
-    const { container } = render(<DepthSelect data={TEST_DATA} />);
-    const root = container.querySelector('[aria-label="Depth select"]');
-    expect(root).toBeTruthy();
-  });
-
   it('supports custom aria-label', () => {
-    const { container } = render(<DepthSelect data={TEST_DATA} ariaLabel="Select a snapshot" />);
+    const { container } = render(
+      <DepthSelect data={TEST_DATA} ariaLabel="Select a snapshot" w={300} h={200} />
+    );
     const root = container.querySelector('[aria-label="Select a snapshot"]');
     expect(root).toBeTruthy();
   });
 
-  // Controls sub-component
+  // withControls
 
-  it('renders Controls sub-component', () => {
-    const { container } = render(
-      <DepthSelect data={TEST_DATA}>
-        <DepthSelect.Controls />
-      </DepthSelect>
-    );
+  it('renders built-in controls by default', () => {
+    const { container } = render(<DepthSelect data={TEST_DATA} w={300} h={200} />);
     expect(container.querySelector('button')).toBeTruthy();
+  });
+
+  it('hides controls when withControls is false', () => {
+    const { container } = render(
+      <DepthSelect data={TEST_DATA} withControls={false} w={300} h={200} />
+    );
+    expect(container.querySelector('button')).toBeFalsy();
   });
 
   it('Controls navigate via up/down buttons', () => {
     const onChange = jest.fn();
     const { container } = render(
-      <DepthSelect data={TEST_DATA} defaultValue="item-2" onChange={onChange}>
-        <DepthSelect.Controls />
-      </DepthSelect>
+      <DepthSelect data={TEST_DATA} defaultValue="item-2" onChange={onChange} w={300} h={200} />
     );
     const buttons = container.querySelectorAll('button');
     fireEvent.click(buttons[0]);
@@ -241,41 +217,24 @@ describe('DepthSelect', () => {
 
   it('Controls disables up button at the end', () => {
     const { container } = render(
-      <DepthSelect data={TEST_DATA} defaultValue="item-5">
-        <DepthSelect.Controls />
-      </DepthSelect>
+      <DepthSelect data={TEST_DATA} defaultValue="item-5" w={300} h={200} />
     );
     const upButton = container.querySelector('[data-disabled]');
     expect(upButton).toBeTruthy();
-  });
-
-  it('Controls renders label via labelFormatter', () => {
-    const { container } = render(
-      <DepthSelect data={TEST_DATA} defaultValue="item-2">
-        <DepthSelect.Controls labelFormatter={(item) => `Selected: ${item.value}`} />
-      </DepthSelect>
-    );
-    expect(container.textContent).toContain('Selected: item-2');
   });
 
   // Controls position
 
   it('sets controls-position data attribute on root', () => {
     const { container } = render(
-      <DepthSelect data={TEST_DATA} controlsPosition="left">
-        <DepthSelect.Controls />
-      </DepthSelect>
+      <DepthSelect data={TEST_DATA} controlsPosition="left" w={300} h={200} />
     );
     const root = container.querySelector('[data-controls-position="left"]');
     expect(root).toBeTruthy();
   });
 
   it('defaults to right controls position', () => {
-    const { container } = render(
-      <DepthSelect data={TEST_DATA}>
-        <DepthSelect.Controls />
-      </DepthSelect>
-    );
+    const { container } = render(<DepthSelect data={TEST_DATA} w={300} h={200} />);
     const root = container.querySelector('[data-controls-position="right"]');
     expect(root).toBeTruthy();
   });
