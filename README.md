@@ -23,19 +23,21 @@ The [Mantine Depth Select](https://gfazioli.github.io/mantine-depth-select/) com
 
 ## Features
 
-- 🎨 **Theme Integration**: Full Mantine theme support with all theme colors
-- 📐 **Flexible Sizing**: Supports all Mantine sizes plus custom values
-- ✨ **Rich Animations**: Multiple animation types (pulse, flash, breathe, blink, glow)
-- 🎭 **Visual Variants**: Flat and 3D rendering styles
-- 🏷️ **Label Support**: Optional labels with configurable positioning
-- 🎛️ **Controlled State**: Full control over the DepthSelect on/off state
-- ♿ **Accessibility**: Follows WAI-ARIA best practices
-- 🎨 **Styles API**: Extensive styling customization support
+- 🃏 **3D Stack Effect**: Cards stacked with perspective transforms (scale, translateY, opacity, blur)
+- 🎛️ **Controlled & Uncontrolled**: Full control via `value`/`onChange` or automatic state management
+- ⌨️ **Keyboard Navigation**: ArrowUp/Down, Home/End keys support
+- 🖱️ **Scroll Navigation**: Mouse wheel and trackpad gesture support
+- 📱 **Touch Support**: Swipe gestures for mobile devices
+- 🔄 **Loop Mode**: Infinite navigation wrapping from last to first
+- 🎮 **Built-in Controls**: Customizable arrow controls with positioning (right/left)
+- 🧩 **Compound Component**: Use `DepthSelect.Controls` as children for full customization
+- ♿ **Accessibility**: WAI-ARIA listbox pattern with proper roles and labels
+- 🎨 **Styles API**: Extensive styling customization with `classNames` prop
 - 📦 **TypeScript**: Full type safety out of the box
 
 > [!note]
 >
-> → [Demo and Documentation](https://gfazioli.github.io/mantine-depth-select/) → [Youtube Video](https://www.youtube.com/playlist?list=PL85tTROKkZrWyqCcmNCdWajpx05-cTal4) → [More Mantine Components](https://mantine-extensions.vercel.app/)
+> → [Demo and Documentation](https://gfazioli.github.io/mantine-depth-select/) → [More Mantine Components](https://mantine-extensions.vercel.app/)
 
 ## Installation
 
@@ -57,10 +59,16 @@ import '@gfazioli/mantine-depth-select/styles.css';
 ## Usage
 
 ```tsx
-import { DepthSelect } from '@gfazioli/mantine-depth-select';
+import { DepthSelect, DepthSelectItem } from '@gfazioli/mantine-depth-select';
+
+const data: DepthSelectItem[] = [
+  { value: 'item-1', view: <Card>Item 1</Card> },
+  { value: 'item-2', view: <Card>Item 2</Card> },
+  { value: 'item-3', view: <Card>Item 3</Card> },
+];
 
 function Demo() {
-  return  <DepthSelect />;
+  return <DepthSelect data={data} w={400} h={200} />;
 }
 ```
 
@@ -77,16 +85,15 @@ Your support helps me:
 - Keep the project actively maintained with timely bug fixes and security updates
 - Add new features, improve performance, and refine the developer experience
 - Expand test coverage and documentation for smoother adoption
-- Ensure long‑term sustainability without relying on ad hoc free time
+- Ensure long-term sustainability without relying on ad hoc free time
 - Prioritize community requests and roadmap items that matter most
 
 Open source thrives when those who benefit can give back—even a small monthly contribution makes a real difference. Sponsorships help cover maintenance time, infrastructure, and the countless invisible tasks that keep a project healthy.
 
 Your help truly matters.
 
-💚 [Become a sponsor](https://github.com/sponsors/gfazioli?o=esc) today and help me keep this project reliable, up‑to‑date, and growing for everyone.
+💚 [Become a sponsor](https://github.com/sponsors/gfazioli?o=esc) today and help me keep this project reliable, up-to-date, and growing for everyone.
 
 ---
 
 [![Star History Chart](https://api.star-history.com/svg?repos=gfazioli/mantine-depth-select&type=Timeline)](https://www.star-history.com/#gfazioli/mantine-depth-select&Timeline)
-
