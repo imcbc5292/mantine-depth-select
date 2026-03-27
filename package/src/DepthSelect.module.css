@@ -96,4 +96,5 @@
   color: var(--mantine-color-dimmed);
   text-align: center;
   user-select: none;
+  white-space: nowrap;
 }

@@ -96,7 +96,7 @@ function Demo() {
   const [value, setValue] = useState<string | number>('snap-1');
 
   return (
-    <Stack>
+    <Stack pt={80}>
       <DepthSelect data={ITEMS} value={value} onChange={setValue} controlsPosition="right">
         <DepthSelect.Controls labelFormatter={(item) => String(item.value)} />
       </DepthSelect>
