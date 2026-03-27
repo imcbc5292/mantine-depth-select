@@ -55,6 +55,16 @@ to the first item and vice versa:
 
 <Demo data={demos.loopDemo} />
 
+## Controls alignment
+
+Use `controlsProps` to customize the built-in
+controls. The `justify` prop aligns them vertically:
+`start` (top), `center` (default), or `end` (bottom).
+You can also set `w` for a fixed width to prevent
+layout shifts when labels change:
+
+<Demo data={demos.controlsJustify} />
+
 ## Custom controls
 
 Set `withControls={false}` to hide the built-in

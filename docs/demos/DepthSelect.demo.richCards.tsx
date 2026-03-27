@@ -138,7 +138,7 @@ function Demo() {
         data={data}
         value={value}
         onChange={setValue}
-        controlsLabelFormatter={(item) => String(item.value)}
+        controlsProps={{ labelFormatter: (item) => String(item.value) }}
         w={400}
         h={340}
       />
@@ -156,7 +156,7 @@ function Demo() {
         data={ITEMS}
         value={value}
         onChange={setValue}
-        controlsLabelFormatter={(item) => String(item.value)}
+        controlsProps={{ labelFormatter: (item) => String(item.value) }}
         w={400}
         h={340}
         mx="auto"

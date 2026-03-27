@@ -146,7 +146,7 @@ function Demo() {
       <DepthSelect
         data={PLANS}
         defaultValue="pro"
-        controlsLabelFormatter={(item) => String(item.value)}
+        controlsProps={{ w: 100, labelFormatter: (item) => String(item.value) }}
         w={350}
         h={380}
         mx="auto"

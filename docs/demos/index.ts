@@ -1,6 +1,7 @@
 export { configurator } from './DepthSelect.demo.configurator';
 export { controlled } from './DepthSelect.demo.controlled';
 export { controlsAsChildren } from './DepthSelect.demo.controlsAsChildren';
+export { controlsJustify } from './DepthSelect.demo.controlsJustify';
 export { customControls } from './DepthSelect.demo.customControls';
 export { loopDemo } from './DepthSelect.demo.loop';
 export { onboarding } from './DepthSelect.demo.onboarding';

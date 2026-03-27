@@ -60,7 +60,7 @@ function Demo() {
       <DepthSelect
         data={data}
         loop
-        controlsLabelFormatter={(item) => String(item.value)}
+        controlsProps={{ labelFormatter: (item) => String(item.value) }}
         w={400}
         h={120}
       />
@@ -75,7 +75,7 @@ function Demo() {
       <DepthSelect
         data={ITEMS}
         loop
-        controlsLabelFormatter={(item) => String(item.value)}
+        controlsProps={{ labelFormatter: (item) => String(item.value) }}
         w={400}
         h={120}
         mx="auto"

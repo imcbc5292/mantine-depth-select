@@ -118,7 +118,7 @@ function Demo() {
     <Stack pt={60}>
       <DepthSelect
         data={VERSIONS}
-        controlsLabelFormatter={(item) => String(item.value)}
+        controlsProps={{ labelFormatter: (item) => String(item.value) }}
         w={400}
         h={180}
         mx="auto"

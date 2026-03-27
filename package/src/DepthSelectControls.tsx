@@ -20,6 +20,9 @@ export interface DepthSelectControlsProps
 
   /** Custom icon for the down button (navigate back toward the front) */
   downIcon?: React.ReactNode;
+
+  /** Vertical alignment of controls: "start" (top), "center" (default), "end" (bottom) */
+  justify?: 'start' | 'center' | 'end';
 }
 
 export type DepthSelectControlsFactory = Factory<{
@@ -62,14 +65,19 @@ const defaultProps: Partial<DepthSelectControlsProps> = {};
 
 export const DepthSelectControls = factory<DepthSelectControlsFactory>((_props, ref) => {
   const props = useProps('DepthSelectControls', defaultProps, _props);
-  const { labelFormatter, upIcon, downIcon, ...others } = props;
+  const { labelFormatter, upIcon, downIcon, justify, ...others } = props;
 
   const ctx = useDepthSelectContext();
 
   const label = labelFormatter && ctx.activeItem ? labelFormatter(ctx.activeItem) : null;
 
+  const justifyMap = { start: 'flex-start', center: 'center', end: 'flex-end' };
+  const controlsVars: React.CSSProperties | undefined = justify
+    ? ({ '--ds-controls-justify': justifyMap[justify] } as React.CSSProperties)
+    : undefined;
+
   return (
-    <Box ref={ref} {...ctx.getStyles('controls')} {...others}>
+    <Box ref={ref} {...ctx.getStyles('controls')} style={controlsVars} {...others}>
       <UnstyledButton
         {...ctx.getStyles('controlUp')}
         onClick={ctx.goNext}

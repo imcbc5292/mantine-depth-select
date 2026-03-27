@@ -11,7 +11,7 @@ import {
 } from '@mantine/core';
 import { useUncontrolled } from '@mantine/hooks';
 import { DepthSelectProvider, type DepthSelectControlsPosition } from './DepthSelect.context';
-import { DepthSelectControls } from './DepthSelectControls';
+import { DepthSelectControls, type DepthSelectControlsProps } from './DepthSelectControls';
 import classes from './DepthSelect.module.css';
 
 export interface DepthSelectItem {
@@ -63,11 +63,8 @@ export interface DepthSelectBaseProps {
   /** Position of the controls relative to the stack, @default "right" */
   controlsPosition?: DepthSelectControlsPosition;
 
-  /** Custom formatter for the label between arrows in built-in controls */
-  controlsLabelFormatter?: (item: {
-    value: string | number;
-    view: React.ReactNode;
-  }) => React.ReactNode;
+  /** Props passed to the built-in Controls component */
+  controlsProps?: DepthSelectControlsProps;
 
   /** Enable loop mode (wrap from last to first and vice versa), @default false */
   loop?: boolean;
@@ -187,7 +184,7 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
     visibleCards,
     withControls,
     controlsPosition,
-    controlsLabelFormatter,
+    controlsProps,
     loop,
     transitionDuration,
     scaleStep,
@@ -419,7 +416,7 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
             );
           })}
         </Box>
-        {withControls && <DepthSelectControls labelFormatter={controlsLabelFormatter} />}
+        {withControls && <DepthSelectControls {...controlsProps} />}
         {children}
       </Box>
     </DepthSelectProvider>
