@@ -147,7 +147,7 @@ function Demo() {
 
   return (
     <Stack pt={80}>
-      <DepthSelect data={ITEMS} value={value} onChange={setValue}>
+      <DepthSelect data={ITEMS} value={value} onChange={setValue} maw={400} mx="auto">
         <DepthSelect.Controls labelFormatter={(item) => String(item.value)} />
       </DepthSelect>
     </Stack>
