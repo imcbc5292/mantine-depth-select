@@ -73,7 +73,7 @@ const data: DepthSelectItem[] = [
 ];
 
 function Demo() {
-  const [value, setValue] = useState<string | number>('snap-1');
+  const [value, setValue] = useState<string | number>('snap-2');
 
   return (
     <Stack>
@@ -93,7 +93,7 @@ function Demo() {
 `;
 
 function Demo() {
-  const [value, setValue] = useState<string | number>('snap-1');
+  const [value, setValue] = useState<string | number>('snap-2');
 
   return (
     <Stack pt={80}>
