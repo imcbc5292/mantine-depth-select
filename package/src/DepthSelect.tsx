@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import {
   Box,
   BoxProps,
@@ -9,7 +9,7 @@ import {
   useProps,
   useStyles,
 } from '@mantine/core';
-import { useUncontrolled } from '@mantine/hooks';
+import { useMergedRef, useUncontrolled } from '@mantine/hooks';
 import { DepthSelectProvider, type DepthSelectControlsPosition } from './DepthSelect.context';
 import { DepthSelectControls, type DepthSelectControlsProps } from './DepthSelectControls';
 import classes from './DepthSelect.module.css';
@@ -66,6 +66,9 @@ export interface DepthSelectBaseProps {
   /** Props passed to the built-in Controls component */
   controlsProps?: DepthSelectControlsProps;
 
+  /** Enable mouse wheel navigation, @default true */
+  withScrollNavigation?: boolean;
+
   /** Enable loop mode (wrap from last to first and vice versa), @default false */
   loop?: boolean;
 
@@ -109,6 +112,7 @@ const defaultProps: Partial<DepthSelectProps> = {
   visibleCards: 4,
   withControls: true,
   controlsPosition: 'right',
+  withScrollNavigation: true,
   loop: false,
   transitionDuration: 400,
   scaleStep: 0.1,
@@ -185,6 +189,7 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
     withControls,
     controlsPosition,
     controlsProps,
+    withScrollNavigation,
     loop,
     transitionDuration,
     scaleStep,
@@ -291,26 +296,46 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
     }
   };
 
-  // Wheel navigation with cooldown
-  const wheelCooldownRef = useRef(false);
-  const handleWheel = useCallback(
-    (event: React.WheelEvent<HTMLDivElement>) => {
-      if (wheelCooldownRef.current || Math.abs(event.deltaY) < 10) {
+  // Wheel navigation with cooldown — uses non-passive listener to prevent page scroll
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const mergedRef = useMergedRef(ref, rootRef);
+
+  const goNextRef = useRef(goNext);
+  const goPreviousRef = useRef(goPrevious);
+  goNextRef.current = goNext;
+  goPreviousRef.current = goPrevious;
+
+  useEffect(() => {
+    const node = rootRef.current;
+    if (!node || !withScrollNavigation) {
+      return;
+    }
+
+    let cooldown = false;
+    const duration = transitionDuration || 400;
+
+    const handleWheel = (event: WheelEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (cooldown || Math.abs(event.deltaY) < 5) {
         return;
       }
-      event.preventDefault();
-      wheelCooldownRef.current = true;
+      cooldown = true;
       if (event.deltaY > 0) {
-        goNext();
+        goNextRef.current();
       } else {
-        goPrevious();
+        goPreviousRef.current();
       }
       setTimeout(() => {
-        wheelCooldownRef.current = false;
-      }, transitionDuration || 400);
-    },
-    [goNext, goPrevious, transitionDuration]
-  );
+        cooldown = false;
+      }, duration);
+    };
+
+    node.addEventListener('wheel', handleWheel, { passive: false });
+    return () => {
+      node.removeEventListener('wheel', handleWheel);
+    };
+  }, [withScrollNavigation, transitionDuration]);
 
   // Touch swipe navigation
   const touchStartRef = useRef<number | null>(null);
@@ -377,7 +402,7 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
       }}
     >
       <Box
-        ref={ref}
+        ref={mergedRef}
         {...getStyles('root')}
         {...others}
         mod={[{ 'controls-position': controlsPosition }, mod]}
@@ -386,7 +411,6 @@ export const DepthSelect = factory<DepthSelectFactory>((_props, ref) => {
         aria-label={ariaLabel || 'Depth select'}
         aria-activedescendant={activeItem ? `ds-item-${activeItem.value}` : undefined}
         onKeyDown={handleKeyDown}
-        onWheel={handleWheel}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >

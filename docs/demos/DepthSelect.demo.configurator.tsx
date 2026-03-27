@@ -102,6 +102,12 @@ export const configurator: MantineDemo = {
       libraryValue: false,
     },
     {
+      type: 'boolean',
+      prop: 'withScrollNavigation',
+      initialValue: true,
+      libraryValue: true,
+    },
+    {
       type: 'number',
       prop: 'visibleCards',
       initialValue: 4,
