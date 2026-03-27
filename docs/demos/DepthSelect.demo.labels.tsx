@@ -1,26 +1,26 @@
-import { Led } from '@gfazioli/mantine-led';
+import { DepthSelect } from '@gfazioli/mantine-depth-select';
 import { Badge, Group, Stack } from '@mantine/core';
 import { MantineDemo } from '@mantinex/demo';
 
 const code = `
 import { Badge, Group, Stack } from '@mantine/core';
-import { Led } from '@gfazioli/mantine-led';
+import { DepthSelect } from '@gfazioli/mantine-depth-select';
 
 function Demo() {
   return (
     <Stack gap="lg">
       <Group>
-        <Led label="Power" />
-        <Led value={false} label="Standby" color="gray" />
+        <DepthSelect label="Power" />
+        <DepthSelect value={false} label="Standby" color="gray" />
       </Group>
 
       <Group>
-        <Led label="Online" labelPosition="left" color="green" />
-        <Led label="Active" labelPosition="right" color="blue" />
+        <DepthSelect label="Online" labelPosition="left" color="green" />
+        <DepthSelect label="Active" labelPosition="right" color="blue" />
       </Group>
 
       <Group>
-        <Led
+        <DepthSelect
           label={<Badge size="sm" variant="light">Custom Label</Badge>}
           color="violet"
         />
@@ -34,17 +34,17 @@ function Demo() {
   return (
     <Stack gap="lg">
       <Group>
-        <Led label="Power" />
-        <Led value={false} label="Standby" color="gray" />
+        <DepthSelect label="Power" />
+        <DepthSelect value={false} label="Standby" color="gray" />
       </Group>
 
       <Group>
-        <Led label="Online" labelPosition="left" color="green" />
-        <Led label="Active" labelPosition="right" color="blue" />
+        <DepthSelect label="Online" labelPosition="left" color="green" />
+        <DepthSelect label="Active" labelPosition="right" color="blue" />
       </Group>
 
       <Group>
-        <Led
+        <DepthSelect
           label={
             <Badge size="sm" variant="light">
               Custom Label

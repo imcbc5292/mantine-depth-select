@@ -1,2 +1,6 @@
-export { Led } from './Led';
-export type { LedBaseProps, LedCssVariables, LedFactory } from './Led';
+export { DepthSelect } from './DepthSelect';
+export type {
+  DepthSelectBaseProps,
+  DepthSelectCssVariables,
+  DepthSelectFactory,
+} from './DepthSelect';

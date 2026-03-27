@@ -17,36 +17,36 @@ import {
   type MantineSize,
   type StyleProp,
 } from '@mantine/core';
-import classes from './Led.module.css';
+import classes from './DepthSelect.module.css';
 
-export type LedVariant = 'flat' | '3d';
+export type DepthSelectVariant = 'flat' | '3d';
 
-export type LedAnimationType = 'pulse' | 'flash' | 'breathe' | 'blink' | 'glow' | 'none';
+export type DepthSelectAnimationType = 'pulse' | 'flash' | 'breathe' | 'blink' | 'glow' | 'none';
 
-export type LedStylesNames = 'root' | 'led' | 'label' | 'light' | 'glow';
+export type DepthSelectStylesNames = 'root' | 'depthSelect' | 'label' | 'light' | 'glow';
 
-export type LedCssVariables = {
+export type DepthSelectCssVariables = {
   root:
-    | '--led-size'
-    | '--led-radius'
-    | '--led-color'
-    | '--led-intensity'
-    | '--led-animation-duration'
-    | '--led-glow-size'
-    | '--led-justify-content';
+    | '--depth-select-size'
+    | '--depth-select-radius'
+    | '--depth-select-color'
+    | '--depth-select-intensity'
+    | '--depth-select-animation-duration'
+    | '--depth-select-glow-size'
+    | '--depth-select-justify-content';
 };
 
-export interface LedBaseProps {
-  /** LED color from theme */
+export interface DepthSelectBaseProps {
+  /** DepthSelect color from theme */
   color?: MantineColor;
 
-  /** LED size */
+  /** DepthSelect size */
   size?: MantineSize | (string & {}) | number;
 
   /** Border radius */
   radius?: MantineRadius | (string & {}) | number;
 
-  /** Controls LED on/off state */
+  /** Controls DepthSelect on/off state */
   value?: boolean;
 
   /** Light intensity (0-100) */
@@ -56,7 +56,7 @@ export interface LedBaseProps {
   animate?: boolean;
 
   /** Animation type; one of 'pulse', 'flash', 'breathe', 'blink', 'glow', or 'none' */
-  animationType?: LedAnimationType;
+  animationType?: DepthSelectAnimationType;
 
   /** Animation duration in seconds */
   animationDuration?: number;
@@ -71,18 +71,19 @@ export interface LedBaseProps {
   justify?: StyleProp<React.CSSProperties['justifyContent']>;
 }
 
-export interface LedProps extends BoxProps, LedBaseProps, StylesApiProps<LedFactory> {}
+export interface DepthSelectProps
+  extends BoxProps, DepthSelectBaseProps, StylesApiProps<DepthSelectFactory> {}
 
-export type LedFactory = PolymorphicFactory<{
-  props: LedProps;
+export type DepthSelectFactory = PolymorphicFactory<{
+  props: DepthSelectProps;
   defaultComponent: 'div';
   defaultRef: HTMLDivElement;
-  stylesNames: LedStylesNames;
-  variant: LedVariant;
-  vars: LedCssVariables;
+  stylesNames: DepthSelectStylesNames;
+  variant: DepthSelectVariant;
+  vars: DepthSelectCssVariables;
 }>;
 
-const defaultProps: Partial<LedProps> = {
+const defaultProps: Partial<DepthSelectProps> = {
   color: 'green',
   size: 'sm',
   radius: 'xl',
@@ -95,25 +96,25 @@ const defaultProps: Partial<LedProps> = {
   labelPosition: 'right',
 };
 
-const varsResolver = createVarsResolver<LedFactory>(
+const varsResolver = createVarsResolver<DepthSelectFactory>(
   (theme, { size, radius, color, intensity, animationDuration, justify }) => {
     return {
       root: {
-        '--led-size': getSize(size, 'led-size'),
-        '--led-radius': radius === undefined ? undefined : getRadius(radius),
-        '--led-color': getThemeColor(color, theme),
-        '--led-intensity': intensity !== undefined ? `${intensity / 100}` : '0.8',
-        '--led-animation-duration':
+        '--depth-select-size': getSize(size, 'depth-select-size'),
+        '--depth-select-radius': radius === undefined ? undefined : getRadius(radius),
+        '--depth-select-color': getThemeColor(color, theme),
+        '--depth-select-intensity': intensity !== undefined ? `${intensity / 100}` : '0.8',
+        '--depth-select-animation-duration':
           animationDuration !== undefined ? `${animationDuration}s` : '1.5s',
-        '--led-glow-size': `calc(var(--led-size) * 0.6)`,
-        '--led-justify-content': String(justify) || 'center',
+        '--depth-select-glow-size': `calc(var(--depth-select-size) * 0.6)`,
+        '--depth-select-justify-content': String(justify) || 'center',
       },
     };
   }
 );
 
-export const Led = polymorphicFactory<LedFactory>((_props, ref) => {
-  const props = useProps('Led', defaultProps, _props);
+export const DepthSelect = polymorphicFactory<DepthSelectFactory>((_props, ref) => {
+  const props = useProps('DepthSelect', defaultProps, _props);
   const {
     size,
     radius,
@@ -138,8 +139,8 @@ export const Led = polymorphicFactory<LedFactory>((_props, ref) => {
     ...others
   } = props;
 
-  const getStyles = useStyles<LedFactory>({
-    name: 'Led',
+  const getStyles = useStyles<DepthSelectFactory>({
+    name: 'DepthSelect',
     props,
     classes,
     className,
@@ -163,7 +164,7 @@ export const Led = polymorphicFactory<LedFactory>((_props, ref) => {
       }}
     >
       <Box
-        {...getStyles('led')}
+        {...getStyles('depthSelect')}
         variant={variant}
         data-value={value || undefined}
         data-animate={animate && value ? animationType : undefined}
@@ -176,5 +177,5 @@ export const Led = polymorphicFactory<LedFactory>((_props, ref) => {
   );
 });
 
-Led.classes = classes;
-Led.displayName = 'Led';
+DepthSelect.classes = classes;
+DepthSelect.displayName = 'DepthSelect';

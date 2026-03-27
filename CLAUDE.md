@@ -4,9 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Repo Is
 
-This is the **GitHub template** used to bootstrap every Mantine Extensions component library. It currently contains a working LED component as a reference implementation. All 19+ component repos in the ecosystem are cloned from this template and share its structure, build pipeline, and tooling.
-
-Changes to shared files here (Shell, Footer, scripts, configs) must be propagated manually to all component repos.
+This is the `mantine-depth-select` component repository — a 3D stack select inspired by macOS Time Machine, built on Mantine UI. Part of the Mantine Extensions ecosystem.
 
 ## Commands
 
@@ -15,7 +13,7 @@ Changes to shared files here (Shell, Footer, scripts, configs) must be propagate
 | `yarn build` | Build the npm package (Rollup + DTS + CSS extraction) |
 | `yarn test` | Full test suite: syncpack → prettier → typecheck → lint → jest |
 | `yarn jest` | Run only Jest unit tests |
-| `yarn jest --testPathPattern=Led` | Run tests for a single component |
+| `yarn jest --testPathPattern=DepthSelect` | Run tests for a single component |
 | `yarn dev` | Start docs dev server at http://localhost:9281 |
 | `yarn storybook` | Start Storybook at http://localhost:8271 |
 | `yarn docgen` | Generate `docs/docgen.json` from component TypeScript types |
@@ -41,7 +39,7 @@ CSS class names are hashed with the prefix `me` via `hash-css-selector`. Non-ind
 
 ## Component Authoring Pattern
 
-Every component follows Mantine's Styles API pattern. Use the LED component (`package/src/Led.tsx`) as the canonical reference:
+Every component follows Mantine's Styles API pattern. Use the DepthSelect component (`package/src/DepthSelect.tsx`) as the canonical reference:
 
 1. **Factory type** — Define a `PolymorphicFactory` type specifying props, default element, stylesNames, variants, and CSS variables.
 2. **Props interface** — Extend `BoxProps` + your base props + `StylesApiProps<YourFactory>`.

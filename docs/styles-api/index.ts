@@ -1,5 +1,5 @@
-import { LedStylesApi } from './Led.styles-api';
+import { DepthSelectStylesApi } from './DepthSelect.styles-api';
 
 export const STYLES_API_DATA = {
-  Led: LedStylesApi,
+  DepthSelect: DepthSelectStylesApi,
 };

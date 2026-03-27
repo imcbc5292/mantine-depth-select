@@ -1,9 +1,9 @@
 import React from 'react';
 import { Divider, Group, Paper, Stack, Text } from '@mantine/core';
-import { Led, type LedProps } from './Led';
+import { DepthSelect, type DepthSelectProps } from './DepthSelect';
 
 export default {
-  title: 'Components/Led',
+  title: 'Components/DepthSelect',
   args: {
     size: 'md',
     radius: 'xl',
@@ -66,15 +66,15 @@ export function Usage() {
     <Stack gap="xl" p="md">
       <Paper p="md" withBorder>
         <Text fw={500} mb="md">
-          Basic LED States
+          Basic DepthSelect States
         </Text>
         <Group>
           <Stack align="center">
-            <Led />
+            <DepthSelect />
             <Text size="xs">On</Text>
           </Stack>
           <Stack align="center">
-            <Led value={false} />
+            <DepthSelect value={false} />
             <Text size="xs">Off</Text>
           </Stack>
         </Group>
@@ -86,11 +86,11 @@ export function Usage() {
         </Text>
         <Group>
           <Stack align="center">
-            <Led variant="flat" />
+            <DepthSelect variant="flat" />
             <Text size="xs">Flat</Text>
           </Stack>
           <Stack align="center">
-            <Led variant="3d" />
+            <DepthSelect variant="3d" />
             <Text size="xs">3D</Text>
           </Stack>
         </Group>
@@ -102,23 +102,23 @@ export function Usage() {
         </Text>
         <Group align="flex-end">
           <Stack align="center">
-            <Led size="xs" />
+            <DepthSelect size="xs" />
             <Text size="xs">XS</Text>
           </Stack>
           <Stack align="center">
-            <Led size="sm" />
+            <DepthSelect size="sm" />
             <Text size="xs">SM</Text>
           </Stack>
           <Stack align="center">
-            <Led size="md" />
+            <DepthSelect size="md" />
             <Text size="xs">MD</Text>
           </Stack>
           <Stack align="center">
-            <Led size="lg" />
+            <DepthSelect size="lg" />
             <Text size="xs">LG</Text>
           </Stack>
           <Stack align="center">
-            <Led size="xl" />
+            <DepthSelect size="xl" />
             <Text size="xs">XL</Text>
           </Stack>
         </Group>
@@ -131,7 +131,7 @@ export function Usage() {
         <Group>
           {['red', 'green', 'blue', 'yellow', 'orange', 'cyan', 'pink', 'violet'].map((color) => (
             <Stack key={color} align="center">
-              <Led color={color} variant="3d" size="lg" />
+              <DepthSelect color={color} variant="3d" size="lg" />
               <Text size="xs" tt="capitalize">
                 {color}
               </Text>
@@ -147,7 +147,7 @@ export function Usage() {
         <Group>
           {[20, 40, 60, 80, 100].map((intensity) => (
             <Stack key={intensity} align="center">
-              <Led intensity={intensity} variant="3d" size="lg" />
+              <DepthSelect intensity={intensity} variant="3d" size="lg" />
               <Text size="xs">{intensity}%</Text>
             </Stack>
           ))}
@@ -160,23 +160,23 @@ export function Usage() {
         </Text>
         <Group>
           <Stack align="center">
-            <Led animate animationType="pulse" size="lg" />
+            <DepthSelect animate animationType="pulse" size="lg" />
             <Text size="xs">Pulse</Text>
           </Stack>
           <Stack align="center">
-            <Led animate animationType="flash" size="lg" color="red" />
+            <DepthSelect animate animationType="flash" size="lg" color="red" />
             <Text size="xs">Flash</Text>
           </Stack>
           <Stack align="center">
-            <Led animate animationType="breathe" size="lg" color="blue" />
+            <DepthSelect animate animationType="breathe" size="lg" color="blue" />
             <Text size="xs">Breathe</Text>
           </Stack>
           <Stack align="center">
-            <Led animate animationType="blink" size="lg" color="yellow" />
+            <DepthSelect animate animationType="blink" size="lg" color="yellow" />
             <Text size="xs">Blink</Text>
           </Stack>
           <Stack align="center">
-            <Led animate animationType="glow" size="lg" color="cyan" />
+            <DepthSelect animate animationType="glow" size="lg" color="cyan" />
             <Text size="xs">Glow</Text>
           </Stack>
         </Group>
@@ -188,15 +188,15 @@ export function Usage() {
         </Text>
         <Group>
           <Stack align="center">
-            <Led animate animationType="pulse" animationDuration={0.5} size="lg" />
+            <DepthSelect animate animationType="pulse" animationDuration={0.5} size="lg" />
             <Text size="xs">Fast (0.5s)</Text>
           </Stack>
           <Stack align="center">
-            <Led animate animationType="pulse" animationDuration={1.5} size="lg" />
+            <DepthSelect animate animationType="pulse" animationDuration={1.5} size="lg" />
             <Text size="xs">Normal (1.5s)</Text>
           </Stack>
           <Stack align="center">
-            <Led animate animationType="pulse" animationDuration={3} size="lg" />
+            <DepthSelect animate animationType="pulse" animationDuration={3} size="lg" />
             <Text size="xs">Slow (3s)</Text>
           </Stack>
         </Group>
@@ -207,41 +207,62 @@ export function Usage() {
           Combined Effects (3D + Animation + High Intensity)
         </Text>
         <Group>
-          <Led variant="3d" animate animationType="glow" intensity={100} size="xl" color="green" />
-          <Led variant="3d" animate animationType="pulse" intensity={90} size="xl" color="red" />
-          <Led variant="3d" animate animationType="breathe" intensity={95} size="xl" color="blue" />
+          <DepthSelect
+            variant="3d"
+            animate
+            animationType="glow"
+            intensity={100}
+            size="xl"
+            color="green"
+          />
+          <DepthSelect
+            variant="3d"
+            animate
+            animationType="pulse"
+            intensity={90}
+            size="xl"
+            color="red"
+          />
+          <DepthSelect
+            variant="3d"
+            animate
+            animationType="breathe"
+            intensity={95}
+            size="xl"
+            color="blue"
+          />
         </Group>
       </Paper>
     </Stack>
   );
 }
 
-export function WithProps(props: LedProps) {
-  return <Led {...props} />;
+export function WithProps(props: DepthSelectProps) {
+  return <DepthSelect {...props} />;
 }
 
 export function WithLabel() {
   return (
     <>
       <Group>
-        <Led label="Server Online" color="green" />
-        <Led label="Server Offline" color="red" value={false} />
-        <Led label={<Text c="blue">Custom Label</Text>} color="blue" />
+        <DepthSelect label="Server Online" color="green" />
+        <DepthSelect label="Server Offline" color="red" value={false} />
+        <DepthSelect label={<Text c="blue">Custom Label</Text>} color="blue" />
       </Group>
       <Divider />
       <div>
-        <Led label="Left Label" labelPosition="left" color="orange" />
+        <DepthSelect label="Left Label" labelPosition="left" color="orange" />
       </div>
 
       <div>
-        <Led label="Right Label" labelPosition="right" color="pink" />
+        <DepthSelect label="Right Label" labelPosition="right" color="pink" />
       </div>
 
       <Divider />
       <Stack>
-        <Led label="Left Label" labelPosition="left" color="orange" />
+        <DepthSelect label="Left Label" labelPosition="left" color="orange" />
 
-        <Led label="Right Label" labelPosition="right" color="pink" />
+        <DepthSelect label="Right Label" labelPosition="right" color="pink" />
       </Stack>
     </>
   );

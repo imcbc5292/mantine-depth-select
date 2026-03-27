@@ -25,12 +25,12 @@ export interface PackageData {
 }
 
 export const PACKAGE_DATA: PackageData = {
-  packageName: '@gfazioli/mantine-led',
+  packageName: '@gfazioli/mantine-depth-select',
   packageDescription:
-    'A highly customizable LED indicator component for React applications built with Mantine. Provides visual feedback for status indicators with support for colors, sizes, animations, and controlled states.',
-  mdxFileUrl: 'https://github.com/gfazioli/mantine-led/blob/master/docs/docs.mdx',
-  repositoryUrl: 'https://github.com/gfazioli/mantine-led',
-  licenseUrl: 'https://github.com/gfazioli/mantine-led/blob/master/LICENSE',
+    'A 3D stack select component inspired by macOS Time Machine for React applications built with Mantine. Navigate through stacked cards with perspective transforms and smooth transitions.',
+  mdxFileUrl: 'https://github.com/gfazioli/mantine-depth-select/blob/master/docs/docs.mdx',
+  repositoryUrl: 'https://github.com/gfazioli/mantine-depth-select',
+  licenseUrl: 'https://github.com/gfazioli/mantine-depth-select/blob/master/LICENSE',
   author: {
     name: 'Giovambattista Fazioli',
     githubUsername: 'gfazioli',

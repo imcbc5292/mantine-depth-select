@@ -1,19 +1,19 @@
-import { Led } from '@gfazioli/mantine-led';
+import { DepthSelect } from '@gfazioli/mantine-depth-select';
 import { MantineDemo } from '@mantinex/demo';
 
 const code = `
-import { Led } from '@gfazioli/mantine-led';
+import { DepthSelect } from '@gfazioli/mantine-depth-select';
 
 function Demo() {
   return (
-    <Led{{props}}/>
+    <DepthSelect{{props}}/>
   );
 }
 `;
 
 export const configurator: MantineDemo = {
   type: 'configurator',
-  component: (props) => <Led {...props} />,
+  component: (props) => <DepthSelect {...props} />,
   code,
   centered: true,
   controls: [

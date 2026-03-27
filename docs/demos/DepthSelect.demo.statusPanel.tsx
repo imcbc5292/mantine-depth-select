@@ -1,31 +1,31 @@
-import { Led } from '@gfazioli/mantine-led';
+import { DepthSelect } from '@gfazioli/mantine-depth-select';
 import { Paper, SimpleGrid, Stack, Text, Title } from '@mantine/core';
 import { MantineDemo } from '@mantinex/demo';
 
 const code = `
 import { Group, Paper, SimpleGrid, Stack, Text, Title } from '@mantine/core';
-import { Led } from '@gfazioli/mantine-led';
+import { DepthSelect } from '@gfazioli/mantine-depth-select';
 
 function Demo() {
   return (
     <Paper p="xl" withBorder>
       <Stack gap="lg">
         <Title order={3}>System Status Panel</Title>
-        
+
         <SimpleGrid cols={2}>
           <Stack gap="md">
             <Text fw={500} size="sm">Network</Text>
             <Stack gap="xs">
-              <Led value label="Internet" color="green" labelPosition="left" />
-              <Led value label="LAN" color="green" labelPosition="left" />
-              <Led value={false} label="VPN" color="gray" labelPosition="left" />
+              <DepthSelect value label="Internet" color="green" labelPosition="left" />
+              <DepthSelect value label="LAN" color="green" labelPosition="left" />
+              <DepthSelect value={false} label="VPN" color="gray" labelPosition="left" />
             </Stack>
           </Stack>
 
           <Stack gap="md">
             <Text fw={500} size="sm">Services</Text>
             <Stack gap="xs">
-              <Led
+              <DepthSelect
                 value
                 label="Database"
                 color="green"
@@ -33,17 +33,17 @@ function Demo() {
                 animate
                 animationType="pulse"
               />
-              <Led value label="API Server" color="green" labelPosition="left" />
-              <Led value label="Cache" color="yellow" labelPosition="left" />
+              <DepthSelect value label="API Server" color="green" labelPosition="left" />
+              <DepthSelect value label="Cache" color="yellow" labelPosition="left" />
             </Stack>
           </Stack>
 
           <Stack gap="md">
             <Text fw={500} size="sm">Resources</Text>
             <Stack gap="xs">
-              <Led value label="CPU Load" color="green" labelPosition="left" />
-              <Led value label="Memory" color="yellow" labelPosition="left" />
-              <Led
+              <DepthSelect value label="CPU Load" color="green" labelPosition="left" />
+              <DepthSelect value label="Memory" color="yellow" labelPosition="left" />
+              <DepthSelect
                 value
                 label="Disk Space"
                 color="red"
@@ -57,9 +57,9 @@ function Demo() {
           <Stack gap="md">
             <Text fw={500} size="sm">Security</Text>
             <Stack gap="xs">
-              <Led value label="Firewall" color="green" labelPosition="left" />
-              <Led value label="SSL Cert" color="green" labelPosition="left" />
-              <Led value label="Auth Service" color="green" labelPosition="left" />
+              <DepthSelect value label="Firewall" color="green" labelPosition="left" />
+              <DepthSelect value label="SSL Cert" color="green" labelPosition="left" />
+              <DepthSelect value label="Auth Service" color="green" labelPosition="left" />
             </Stack>
           </Stack>
         </SimpleGrid>
@@ -80,9 +80,19 @@ function Demo() {
             <Text fw={800}>Network</Text>
             <Paper withBorder p="md">
               <Stack gap="xs">
-                <Led label="Internet" color="green" labelPosition="left" justify="space-between" />
-                <Led label="LAN" color="green" labelPosition="left" justify="space-between" />
-                <Led
+                <DepthSelect
+                  label="Internet"
+                  color="green"
+                  labelPosition="left"
+                  justify="space-between"
+                />
+                <DepthSelect
+                  label="LAN"
+                  color="green"
+                  labelPosition="left"
+                  justify="space-between"
+                />
+                <DepthSelect
                   value={false}
                   label="VPN"
                   color="gray"
@@ -97,7 +107,7 @@ function Demo() {
             <Text fw={800}>Services</Text>
             <Paper withBorder p="md">
               <Stack gap="xs">
-                <Led
+                <DepthSelect
                   value
                   label="Database"
                   color="green"
@@ -106,13 +116,18 @@ function Demo() {
                   animationType="blink"
                   justify="space-between"
                 />
-                <Led
+                <DepthSelect
                   label="API Server"
                   color="green"
                   labelPosition="left"
                   justify="space-between"
                 />
-                <Led label="Cache" color="yellow" labelPosition="left" justify="space-between" />
+                <DepthSelect
+                  label="Cache"
+                  color="yellow"
+                  labelPosition="left"
+                  justify="space-between"
+                />
               </Stack>
             </Paper>
           </Stack>
@@ -121,7 +136,7 @@ function Demo() {
             <Text fw={800}>Resources</Text>
             <Paper withBorder p="md">
               <Stack gap="xs">
-                <Led
+                <DepthSelect
                   label="CPU Load"
                   color="green"
                   labelPosition="left"
@@ -129,8 +144,13 @@ function Demo() {
                   animate
                   animationType="glow"
                 />
-                <Led label="Memory" color="yellow" labelPosition="left" justify="space-between" />
-                <Led
+                <DepthSelect
+                  label="Memory"
+                  color="yellow"
+                  labelPosition="left"
+                  justify="space-between"
+                />
+                <DepthSelect
                   value
                   label="Disk Space"
                   color="red"
@@ -147,15 +167,20 @@ function Demo() {
             <Text fw={800}>Security</Text>
             <Paper withBorder p="md">
               <Stack gap="xs">
-                <Led label="Firewall" color="green" labelPosition="left" justify="space-between" />
-                <Led
+                <DepthSelect
+                  label="Firewall"
+                  color="green"
+                  labelPosition="left"
+                  justify="space-between"
+                />
+                <DepthSelect
                   label="SSL Cert"
                   color="green"
                   labelPosition="left"
                   justify="space-between"
                   value={false}
                 />
-                <Led
+                <DepthSelect
                   label="Auth Service"
                   color="green"
                   labelPosition="left"

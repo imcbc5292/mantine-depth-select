@@ -1,10 +1,10 @@
-import { LedFactory } from '@gfazioli/mantine-led';
+import { DepthSelectFactory } from '@gfazioli/mantine-depth-select';
 import type { StylesApiData } from '../components/styles-api.types';
 
-export const LedStylesApi: StylesApiData<LedFactory> = {
+export const DepthSelectStylesApi: StylesApiData<DepthSelectFactory> = {
   selectors: {
     root: 'Root element',
-    led: 'LED element',
+    depthSelect: 'DepthSelect element',
     label: 'Label element',
     glow: 'Outer glow effect element',
     light: 'Inner light reflection element',
@@ -12,13 +12,13 @@ export const LedStylesApi: StylesApiData<LedFactory> = {
 
   vars: {
     root: {
-      '--led-size': 'Controls LED width and height',
-      '--led-radius': 'Controls border radius',
-      '--led-color': 'Controls LED base color',
-      '--led-intensity': 'Controls brightness intensity (0-1)',
-      '--led-animation-duration': 'Controls animation duration',
-      '--led-glow-size': 'Controls outer glow size',
-      '--led-justify-content': 'Controls label and LED alignment',
+      '--depth-select-size': 'Controls DepthSelect width and height',
+      '--depth-select-radius': 'Controls border radius',
+      '--depth-select-color': 'Controls DepthSelect base color',
+      '--depth-select-intensity': 'Controls brightness intensity (0-1)',
+      '--depth-select-animation-duration': 'Controls animation duration',
+      '--depth-select-glow-size': 'Controls outer glow size',
+      '--depth-select-justify-content': 'Controls label and DepthSelect alignment',
     },
   },
 
