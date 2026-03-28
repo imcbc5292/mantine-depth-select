@@ -18,6 +18,13 @@ export const ecosystem = [
     newWindow: true,
   },
   {
+    key: 'mantine-depth-select',
+    title: 'Mantine Depth Select',
+    href: 'https://gfazioli.github.io/mantine-depth-select',
+    newWindow: true,
+    new: true,
+  },
+  {
     key: 'mantine-flip',
     title: 'Mantine Flip',
     href: 'https://gfazioli.github.io/mantine-flip',
@@ -30,9 +37,9 @@ export const ecosystem = [
     newWindow: true,
   },
   {
-    key: 'mantine-depth-select',
-    title: 'Mantine Depth Select',
-    href: 'https://gfazioli.github.io/mantine-depth-select',
+    key: 'mantine-led',
+    title: 'Mantine Led',
+    href: 'https://gfazioli.github.io/mantine-led',
     newWindow: true,
   },
   {
