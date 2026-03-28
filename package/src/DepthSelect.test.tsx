@@ -323,4 +323,22 @@ describe('DepthSelect', () => {
     );
     expect(container).toBeTruthy();
   });
+
+  // Custom icons
+
+  it('renders custom upIcon and downIcon via controlsProps', () => {
+    const { container } = render(
+      <DepthSelect
+        data={TEST_DATA}
+        controlsProps={{
+          upIcon: <span data-testid="custom-up">UP</span>,
+          downIcon: <span data-testid="custom-down">DOWN</span>,
+        }}
+        w={300}
+        h={200}
+      />
+    );
+    expect(container.querySelector('[data-testid="custom-up"]')).toBeTruthy();
+    expect(container.querySelector('[data-testid="custom-down"]')).toBeTruthy();
+  });
 });
